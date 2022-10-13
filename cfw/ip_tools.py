@@ -21,6 +21,14 @@ def get_ip() -> pd.DataFrame:
         capture_output=True
     )
     text = r.stdout.decode()
-    data = [line.split(' ', 1) for line in text.split("\n")[:-1]]
-    data_df = pd.DataFrame(data, columns=['server', 'client'])
+    data = []
+    for line in text.split("\n")[:-1]:
+        server, client = line.split(" ")
+        server_ip, server_port = server.split(":")
+        client_ip, client_port = client.split(":")
+        data.append([server_ip, server_port, client_ip, client_port])
+    data_df = pd.DataFrame(
+        data, 
+        columns=["server_ip", "server_port", "client_ip", "client_port"]
+    )
     return data_df
