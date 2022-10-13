@@ -1,10 +1,10 @@
 import pprint
 
-from cfw import get_ip
+import cfw
 
 
 def main():
-    form = get_ip()
+    form = cfw.get_ip()
     pprint.pprint(form)
 
 

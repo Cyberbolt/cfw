@@ -7,7 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pandas = "^1.5.0"
 
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+default = true
 
 [build-system]
 requires = ["poetry-core"]
