@@ -1,4 +1,4 @@
-import os
+import pprint
 import subprocess
 
 
@@ -9,8 +9,9 @@ def main():
         capture_output=True
     )
     text = r.stdout.decode()
-    print(text)
     
+    new = [line.strip().rsplit(' ', 1) for line in text.split('\n')[:-1]]
+    pprint.pprint(new)
 
 
 if __name__ == '__main__':
