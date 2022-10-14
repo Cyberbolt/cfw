@@ -9,7 +9,7 @@ global:
 # Take effect by ip
 local:
     - 
-      ip: 69.162.81.155
+      ip: 69.162.81.157
       frequency: 5
       max_num: 100
       # Take effect by port
