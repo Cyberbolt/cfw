@@ -6,6 +6,8 @@ global:
   max_num: 100
   # time to unblock ip
   unblock: 600
+  whitelist: whitelist.txt
+  blacklist: balack.txt
 # Take effect by ip
 local:
     - 
