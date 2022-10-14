@@ -2,13 +2,15 @@
     Get and handle socket connections.
 """
 
-import json
+import yaml
+import pprint
 import subprocess
 
 import pandas as pd
 
-with open('config.json') as f:
-    config = json.load(f)
+with open('config.yaml') as f:
+    config = yaml.load(f, Loader=yaml.FullLoader)
+pprint.pprint(config)
 
 
 def get_ip() -> pd.DataFrame:
