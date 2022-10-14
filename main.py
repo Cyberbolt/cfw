@@ -1,11 +1,11 @@
-import pprint
+import time
 
 import cfw
 
 
 def main():
-    form = cfw.get_ip()
-    pprint.pprint(form)
+    while True:
+        time.sleep(60 * 60 * 24 * 365 * 100)
 
 
 if __name__ == "__main__":

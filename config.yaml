@@ -3,7 +3,7 @@ global:
   # Program running frequency, unit: second
   frequency: 5
   # Maximum number of connections running
-  max_num: 100
+  max_num: 1
   # time to unblock ip
   unblock: 600
   whitelist: whitelist.txt
