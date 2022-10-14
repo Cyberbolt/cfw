@@ -3,14 +3,22 @@
 """
 
 import yaml
-import pprint
 import subprocess
 
 import pandas as pd
+from apscheduler.schedulers.background import BackgroundScheduler
 
-with open('config.yaml') as f:
+from .CFWError import ConfigurationCFWError
+
+with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
-pprint.pprint(config)
+
+r = subprocess.run(
+    "ipset create blacklist hash:ip", 
+    shell=True,
+    capture_output=True
+)
+text = r.stdout.decode()
 
 
 def get_ip() -> pd.DataFrame:
@@ -34,3 +42,26 @@ def get_ip() -> pd.DataFrame:
         columns=["server_ip", "server_port", "client_ip", "client_port"]
     )
     return data_df
+
+
+def load_config():
+    if not config.get("global"):
+        raise ConfigurationCFWError(
+            "'global' was not found in the yaml file."
+        )
+    if not config["global"].get("frequency"):
+        raise ConfigurationCFWError(
+            "'frequency' is not set in 'global'."
+        )
+    if not config["global"].get("max_num"):
+        raise ConfigurationCFWError(
+            "'max_num' is not set in 'global'."
+        )
+    if not config["global"].get("unblock"):
+        raise ConfigurationCFWError(
+            "'unblock' is not set in 'global'."
+        )
+    
+
+
+load_config()
