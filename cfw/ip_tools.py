@@ -14,7 +14,7 @@ with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 r = subprocess.run(
-    "ipset create blacklist hash:ip", 
+    "ipset create blacklist hash:net", 
     shell=True,
     capture_output=True
 )
