@@ -76,13 +76,12 @@ def cfw_init():
     cfw initialization, open port 22 and loopback address by default.
     """
     shell("iptables -A INPUT -p tcp --dport  22 -j ACCEPT")
-    # print("======", a, str(a))
-    # shell("iptables -P INPUT DROP")
-    # shell("iptables -P FORWARD DROP")
-    # shell("iptables -P OUTPUT DROP")
-    # shell("iptables -A INPUT -i lo -j ACCEPT")
-    # shell("iptables -A OUTPUT -o lo -j ACCEPT")
-    # shell("iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT")
+    shell("iptables -P INPUT DROP")
+    shell("iptables -P FORWARD DROP")
+    shell("iptables -P OUTPUT DROP")
+    shell("iptables -A INPUT -i lo -j ACCEPT")
+    shell("iptables -A OUTPUT -o lo -j ACCEPT")
+    shell("iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT")
     
 def close_22():
     """
