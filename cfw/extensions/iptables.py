@@ -94,3 +94,24 @@ def close_22():
     except:
         pass
 
+def open_22():
+    """
+    open port 22
+    """
+    try:
+        shell("iptables -D INPUT -p tcp --dport  22 -j DROP")
+        shell("iptables -A INPUT -p tcp --dport  22 -j ACCEPT")
+    except:
+        pass
+
+def ddos_protection():
+    """
+    Use cfw for ddos protection.
+    """
+    # DOS
+    shell("iptables -A INPUT -i eth0 -p tcp --syn -m connlimit --connlimit-above 15 -j DROP")
+    shell("iptables -A INPUT -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT")
+    
+    # DDOS
+    shell("iptables -A INPUT  -p tcp --syn -m limit --limit 12/s --limit-burst 24 -j DROP")  
+    shell("iptables -A FORWARD -p tcp --syn -m limit --limit 1/s -j ACCEPT ")
