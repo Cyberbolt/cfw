@@ -63,19 +63,34 @@ def shell(cmd: str) -> str:
     r = subprocess.run(
         cmd, 
         shell=True,
-        # capture_output=True
+        # capture_output=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        encoding="utf-8"
     )
     # return r.stdout.decode()
+    return r
 
 def cfw_init():
     """
     cfw initialization, open port 22 and loopback address by default.
     """
-    shell("iptables -A INPUT -i lo -j ACCEPT")
+    shell("iptables -A INPUT -p tcp --dport  22 -j ACCEPT")
+    # print("======", a, str(a))
     # shell("iptables -P INPUT DROP")
     # shell("iptables -P FORWARD DROP")
     # shell("iptables -P OUTPUT DROP")
     # shell("iptables -A INPUT -i lo -j ACCEPT")
     # shell("iptables -A OUTPUT -o lo -j ACCEPT")
-
+    # shell("iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT")
+    
+def close_22():
+    """
+    close port 22
+    """
+    try:
+        shell("iptables -D INPUT -p tcp --dport  22 -j ACCEPT")
+        shell("iptables -A INPUT -p tcp --dport  22 -j DROP")
+    except:
+        pass
 
