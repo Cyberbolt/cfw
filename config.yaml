@@ -8,22 +8,3 @@ global:
   unblock: 600
   whitelist: whitelist.txt
   blacklist: balack.txt
-# Take effect by ip
-local:
-    - 
-      ip: 69.162.81.157
-      frequency: 5
-      max_num: 100
-      # Take effect by port
-      port:
-        3306:
-          frequency: 5
-          max_num: 100
-    - 
-      ip: 69.162.81.156
-      frequency: 5
-      max_num: 100
-      port:
-        3306:
-          frequency: 5
-          max_num: 100
