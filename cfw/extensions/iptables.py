@@ -45,8 +45,13 @@ def block_ip(ip: str):
     for ip_w in whitelist:
         if ipaddress.IPv4Address(ip) in ipaddress.IPv4Network(ip_w):
             print('sadasdasddsa')
-            return
+            return False
     shell(f"ipset add blacklist {ip}")
+    return True
+    
+
+def unblock_ip(ip: str):
+    pass
 
 
 shell("ipset create blacklist hash:net")
