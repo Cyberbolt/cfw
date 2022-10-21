@@ -5,5 +5,5 @@ class CFWError(RuntimeError):
 class ConfigurationCFWError(CFWError):
     pass
 
-class WhitelistCFWError(CFWError):
+class ListCFWError(CFWError):
     pass

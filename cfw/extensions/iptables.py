@@ -5,7 +5,7 @@
 import ipaddress
 import subprocess
 
-from ..CFWError import WhitelistCFWError
+from ..CFWError import *
 
 
 def shell(cmd: str) -> str:
@@ -20,7 +20,7 @@ def shell(cmd: str) -> str:
     return r.stdout.decode()
 
 
-class Whitelist(list):
+class Iplist(list):
     
     def __init__(self, path: str):
         """
@@ -35,10 +35,10 @@ class Whitelist(list):
                 try:
                     ip = str(ipaddress.IPv4Network(ip))
                 except ipaddress.NetmaskValueError:
-                    raise WhitelistCFWError("The whitelist ip format is incorrect.")
+                    raise ListCFWError("The ip format is incorrect.")
             self.append(ip)
 
-whitelist = Whitelist("whitelist.txt")
+whitelist = Iplist("whitelist.txt")
 
 
 def block_ip(ip: str):
@@ -46,29 +46,36 @@ def block_ip(ip: str):
         if ipaddress.IPv4Address(ip) in ipaddress.IPv4Network(ip_w):
             return False
     r = shell(f"ipset add blacklist {ip}")
-    if r:
-        print(r)
+    if r != '':
+        return False
     return True
-    
+
 
 def unblock_ip(ip: str):
     r = shell(f"ipset del blacklist {ip}")
-    if r:
-        print(r)
+    if r != '':
+        return False
     return True
 
-# cfw init
-port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
-shell(f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT")
-shell(f"iptables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
-shell("iptables -P INPUT DROP")
-shell("iptables -P FORWARD DROP")
-shell("iptables -P OUTPUT DROP")
-shell("iptables -A INPUT -i lo -j ACCEPT")
-shell("iptables -A OUTPUT -o lo -j ACCEPT")
-shell("iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT")
 
-shell("ipset create blacklist hash:net timeout 2147483")
-shell("iptables -F")
-shell("iptables -I INPUT -m set --match-set blacklist src -j DROP")
-shell("ipset restore -f cfw/data/ipset_blacklist.txt")
+def cfw_init():
+    if 'blacklist' in shell("iptables -L"):
+        return False
+    shell("iptables -F")
+    port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
+    if port != '\n':
+        shell(f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT")
+        shell(f"iptables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        shell(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
+        shell(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
+        shell(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
+        shell(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
+    else:
+        shell(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+        shell(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+        shell(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+        shell(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+    shell("ipset create blacklist hash:net timeout 2147483")
+    shell("iptables -I INPUT -m set --match-set blacklist src -j DROP")
+    shell("ipset restore -f cfw/data/ipset_blacklist.txt")
+    return True

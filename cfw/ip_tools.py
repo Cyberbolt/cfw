@@ -10,13 +10,13 @@ import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from .extensions import iptables, shell
-from .CFWError import ConfigurationCFWError
+from .CFWError import ConfigurationCFWError, ListCFWError
 
 with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 
-def get_ip() -> pd.DataFrame:
+def get_ss_ip() -> pd.DataFrame:
     """
         Get the current socket connection and convert it to a DataFrame.
     """
@@ -53,8 +53,15 @@ def load_config():
         )
 
 
-def block_ips_run():
-    data = get_ip()
+def block_blacklist_ip():
+    blacklist = iptables.Iplist("blacklist.txt")
+    for ip in blacklist:
+        if not iptables.block_ip(ip):
+            raise ListCFWError(f"The '{ip}' of the blacklist exists in the whitelist.")
+
+
+def block_ss_ip():
+    data = get_ss_ip()
     data = data.groupby(["client_ip"], as_index = False)["client_ip"].agg({
         "num": np.size
     }).sort_values(by="num", ascending=False, ignore_index=True)
@@ -66,24 +73,27 @@ def block_ips_run():
         iptables.block_ip(ip)
 
 
-def save_ips_run():
+def save_ipset():
     shell("ipset save blacklist -f cfw/data/ipset_blacklist.txt")
 
 
-load_config()
+def run():
+    load_config()
+    iptables.cfw_init()
+    # block_blacklist_ip()
 
-sched = BackgroundScheduler(timezone="Asia/Shanghai")
-# ips are banned periodically.
-sched.add_job(
-    block_ips_run, 
-    'interval', 
-    seconds=config["global"]["frequency"]
-)
-# Save an ipset every 300 seconds.
-sched.add_job(
-    save_ips_run, 
-    'interval', 
-    seconds=300
-)
-sched.start()
-print("CFW starts running.")
+    sched = BackgroundScheduler(timezone="Asia/Shanghai")
+    # ips are banned periodically.
+    sched.add_job(
+        block_ss_ip, 
+        'interval', 
+        seconds=config["global"]["frequency"]
+    )
+    # Save an ipset every 300 seconds.
+    sched.add_job(
+        save_ipset, 
+        'interval', 
+        seconds=300
+    )
+    sched.start()
+    print("CFW starts running.")
