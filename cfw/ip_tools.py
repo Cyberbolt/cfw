@@ -66,12 +66,24 @@ def block_ips_run():
         iptables.block_ip(ip)
 
 
+def save_ips_run():
+    shell("ipset save blacklist -f cfw/data/ipset_blacklist.txt")
+
+
 load_config()
 
 sched = BackgroundScheduler(timezone="Asia/Shanghai")
+# ips are banned periodically.
 sched.add_job(
     block_ips_run, 
     'interval', 
     seconds=config["global"]["frequency"]
 )
+# Save an ipset every 300 seconds.
+sched.add_job(
+    save_ips_run, 
+    'interval', 
+    seconds=300
+)
 sched.start()
+print("CFW starts running.")

@@ -1,1 +1,1 @@
-from .iptables import shell, cfw_init
+from .iptables import shell
