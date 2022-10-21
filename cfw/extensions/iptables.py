@@ -57,6 +57,16 @@ def unblock_ip(ip: str):
         print(r)
     return True
 
+# cfw init
+port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
+shell(f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT")
+shell(f"iptables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+shell("iptables -P INPUT DROP")
+shell("iptables -P FORWARD DROP")
+shell("iptables -P OUTPUT DROP")
+shell("iptables -A INPUT -i lo -j ACCEPT")
+shell("iptables -A OUTPUT -o lo -j ACCEPT")
+shell("iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT")
 
 shell("ipset create blacklist hash:net timeout 2147483")
 shell("iptables -F")
