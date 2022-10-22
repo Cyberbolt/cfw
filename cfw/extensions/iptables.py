@@ -2,6 +2,8 @@
     Call the Linux iptables API.
 """
 
+import os
+import pickle
 import ipaddress
 import subprocess
 
@@ -18,6 +20,77 @@ def shell(cmd: str) -> str:
         capture_output=True
     )
     return r.stdout.decode()
+
+
+class Rules(list):
+    """
+        Data structure for storing iptables rules
+    """
+    
+    def __init__(self):
+        # If rules.list exists, load the previous configuration file.
+        if os.path.exists("cfw/data/rules.list"):
+            with open("cfw/data/rules.list", "rb") as f:
+                self = pickle.load(f)
+            return
+        # New configuration file
+        ssh_port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
+        if ssh_port == '\n':
+            ssh_port = None
+        if ssh_port:
+            self.append(f"iptables -A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
+            self.append(f"iptables -A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
+            self.append(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
+            self.append(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
+            self.append(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
+            self.append(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
+        else:
+            self.append(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+            self.append(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+            self.append(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+            self.append(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+        self.append("iptables -I INPUT -m set --match-set blacklist src -j DROP")
+        
+    def add_tcp_port(self, port: str) -> bool:
+        if f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT" in self:
+            return False
+        self.insert(0, f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT")
+        self.insert(0, f"iptables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        return True
+        
+    def rm_tcp_port(self, port: str) -> bool:
+        if f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT" not in self:
+            return False
+        self.remove(f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT")
+        self.remove(f"iptables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        return True
+        
+    def add_udp_port(self, port: str) -> bool:
+        if f"iptables -A INPUT -p udp --dport {port} -j ACCEPT" in self:
+            return False
+        self.insert(0, f"iptables -A INPUT -p udp --dport {port} -j ACCEPT")
+        self.insert(0, f"iptables -A OUTPUT -p udp --dport {port} -j ACCEPT")
+        return True
+        
+    def rm_udp_port(self, port: str) -> bool:
+        if f"iptables -A INPUT -p udp --dport {port} -j ACCEPT" not in self:
+            return False
+        self.remove(f"iptables -A INPUT -p udp --dport {port} -j ACCEPT")
+        self.remove(f"iptables -A OUTPUT -p udp --dport {port} -j ACCEPT")
+        return True
+        
+    def save_rules(self):
+        start = "*filter\n:INPUT ACCEPT [0:0]\n:FORWARD ACCEPT [0:0]\n:OUTPUT ACCEPT [0:0]\n"
+        end = "COMMIT"
+        content = ''
+        for line in self:
+            content += line + '\n'
+        rules = start + content + end
+        with open("cfw/data/rules.list", "wb") as f:
+            pickle.dump(self, f)
+        with open("/etc/iptables-cfw", "w") as f:
+            f.write(rules)
+        shell("iptables-restore < /etc/iptables-cfw")
 
 
 class Iplist(list):
@@ -58,24 +131,10 @@ def unblock_ip(ip: str):
     return True
 
 
+def ipset_save():
+    shell("ipset save blacklist -f cfw/data/ipset_blacklist.txt")
+
+
 def cfw_init():
-    if 'blacklist' in shell("iptables -L"):
-        return False
-    shell("iptables -F")
-    port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
-    if port != '\n':
-        shell(f"iptables -A INPUT -p tcp --dport {port} -j ACCEPT")
-        shell(f"iptables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
-        shell(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
-        shell(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
-        shell(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
-        shell(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{port-1}, {port+1}:65535 -j DROP")
-    else:
-        shell(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        shell(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        shell(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        shell(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
     shell("ipset create blacklist hash:net timeout 2147483")
-    shell("iptables -I INPUT -m set --match-set blacklist src -j DROP")
     shell("ipset restore -f cfw/data/ipset_blacklist.txt")
-    return True

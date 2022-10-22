@@ -16,6 +16,9 @@ with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 
+rules = iptables.Rules()
+
+
 def get_ss_ip() -> pd.DataFrame:
     """
         Get the current socket connection and convert it to a DataFrame.
@@ -73,14 +76,10 @@ def block_ss_ip():
         iptables.block_ip(ip)
 
 
-def save_ipset():
-    shell("ipset save blacklist -f cfw/data/ipset_blacklist.txt")
-
-
 def run():
     load_config()
     iptables.cfw_init()
-    # block_blacklist_ip()
+    rules.save_rules()
 
     sched = BackgroundScheduler(timezone="Asia/Shanghai")
     # ips are banned periodically.
@@ -89,11 +88,11 @@ def run():
         'interval', 
         seconds=config["global"]["frequency"]
     )
-    # Save an ipset every 300 seconds.
+    # Save an ipset every 60 seconds.
     sched.add_job(
-        save_ipset, 
+        iptables.ipset_save, 
         'interval', 
-        seconds=300
+        seconds=60
     )
     sched.start()
     print("CFW starts running.")
