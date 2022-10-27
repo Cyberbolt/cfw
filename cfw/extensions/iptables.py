@@ -40,15 +40,17 @@ class Rules(list):
         if ssh_port:
             self.append(f"iptables -A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
             self.append(f"iptables -A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.append(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
-            self.append(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
-            self.append(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
-            self.append(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:{ssh_port-1}, {ssh_port+1}:65535 -j DROP")
+            self.append(f"iptables -A INPUT -i lo -j ACCEPT")
+            self.append(f"iptables -A OUTPUT -o lo -j ACCEPT")
+            self.append(f"iptables -P INPUT DROP")
+            self.append(f"iptables -P FORWARD DROP")
+            self.append(f"iptables -P OUTPUT DROP")
         else:
-            self.append(f"iptables -A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-            self.append(f"iptables -A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-            self.append(f"iptables -A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-            self.append(f"iptables -A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+            self.append(f"iptables -A INPUT -i lo -j ACCEPT")
+            self.append(f"iptables -A OUTPUT -o lo -j ACCEPT")
+            self.append(f"iptables -P INPUT DROP")
+            self.append(f"iptables -P FORWARD DROP")
+            self.append(f"iptables -P OUTPUT DROP")
         self.append("iptables -I INPUT -m set --match-set blacklist src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
