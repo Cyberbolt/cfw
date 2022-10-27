@@ -119,14 +119,21 @@ class Iplist(list):
             path: Path to the whitelist file
         """
         if version == 6:
-            self.version = '6'
-        elif version != 4:
+            self.version = 6
+        elif version == 4:
+            self.version = 4
+        else:
             raise ParameterCFWError("The version number can only be 4 or 6.")
+        self.load(path)
         
+    def load(self, path: str):
+        """
+            Load the black and white list.
+        """
         with open(path, 'r') as f:
             text = f.read()
         for ip in text.splitlines():
-            if version == 4:
+            if self.version == 4:
                 try:
                     ip = str(ipaddress.IPv4Address(ip))
                 except ipaddress.AddressValueError:
@@ -135,7 +142,7 @@ class Iplist(list):
                     except ipaddress.NetmaskValueError:
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
-            elif version == 6:
+            elif self.version == 6:
                 try:
                     ip = str(ipaddress.IPv6Address(ip))
                 except ipaddress.AddressValueError:
@@ -144,6 +151,7 @@ class Iplist(list):
                     except ipaddress.NetmaskValueError:
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
+
 
 whitelist = Iplist(config["whitelist"])
 whitelist6 = Iplist(config["whitelist6"], version=6)
