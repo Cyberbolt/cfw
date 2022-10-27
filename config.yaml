@@ -1,3 +1,5 @@
+# cfw run port
+port: 6680
 # Program running frequency, unit: second
 frequency: 5
 # Maximum number of connections running

@@ -10,6 +10,10 @@ with open("config.yaml") as f:
 
 
 def load_config():
+    if not config.get("port"):
+        raise ConfigurationCFWError(
+            "The 'port' parameter does not exist."
+        )
     if not config.get("frequency"):
         raise ConfigurationCFWError(
             "The 'frequency' parameter does not exist."
