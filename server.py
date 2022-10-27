@@ -1,13 +1,14 @@
-import time
+from typing import Union
+
+import uvicorn
+from fastapi import FastAPI
 
 import cfw
 
-
-def main():
-    cfw.run()
-    while True:
-        time.sleep(60 * 60 * 24 * 365 * 100)
+cfw.run()
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    main()
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}

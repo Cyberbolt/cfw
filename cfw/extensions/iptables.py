@@ -32,12 +32,12 @@ class Rules(list):
         Data structure for storing iptables rules
     """
     
+    version = ''
+    
     def __init__(self, version: int = 4):
-        if version == 4:
-            self.version = ''
-        elif version == 6:
+        if version == 6:
             self.version == '6'
-        else:
+        elif version != 4:
             raise ParameterCFWError("The version number can only be 4 or 6.")
         # If rules.list exists, load the previous configuration file.
         if os.path.exists(f"cfw/data/rules{self.version}.list"):
@@ -112,15 +112,15 @@ class Rules(list):
 
 class Iplist(list):
     
+    version = ''
+    
     def __init__(self, path: str, version: int = 4):
         """
             path: Path to the whitelist file
         """
-        if version == 4:
-            self.version = ''
-        elif version == 6:
+        if version == 6:
             self.version == '6'
-        else:
+        elif version != 4:
             raise ParameterCFWError("The version number can only be 4 or 6.")
         
         with open(path, 'r') as f:
