@@ -3,6 +3,8 @@ cfw/data/rules.list
 cfw/data/rules6.list
 cfw/data/ipset_blacklist.txt
 cfw/data/ipset_blacklist6.txt
+cfw/data/iptables-cfw
+cfw/data/ip6tables-cfw
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
