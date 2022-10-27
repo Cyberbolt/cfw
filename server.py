@@ -5,10 +5,10 @@ from fastapi import FastAPI
 
 import cfw
 
-cfw.run()
+cfw.start()
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/restart")
 def read_root():
     return {"Hello": "World"}

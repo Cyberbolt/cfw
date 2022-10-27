@@ -1,8 +1,10 @@
 import yaml
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from .CFWError import ConfigurationCFWError
 
 
+sched = BackgroundScheduler(timezone="Asia/Shanghai")
 with open("config.yaml") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 

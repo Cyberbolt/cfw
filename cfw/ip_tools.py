@@ -6,9 +6,8 @@ import ipaddress
 
 import numpy as np
 import pandas as pd
-from apscheduler.schedulers.background import BackgroundScheduler
 
-from .config import config
+from .config import config, sched
 from .extensions import iptables, shell
 from .CFWError import ListCFWError
 
@@ -58,28 +57,37 @@ def block_ss_ip():
             iptables.block_ip6(ip, config["unblock_time"])
 
 
-def run():
+def start():
     iptables.cfw_init()
     rules.save_rules()
     rules6.save_rules()
 
-    sched = BackgroundScheduler(timezone="Asia/Shanghai")
     # ips are banned periodically.
     sched.add_job(
         block_ss_ip, 
         'interval', 
-        seconds=config["frequency"]
+        seconds=config["frequency"],
+        id="block_ss_ip"
     )
     # Save an ipset every 60 seconds.
     sched.add_job(
         iptables.ipset_save, 
         'interval', 
-        seconds=config["backup_time"]
+        seconds=config["backup_time"],
+        id="iptables.ipset_save"
     )
     sched.add_job(
         iptables.ipset6_save, 
         'interval', 
-        seconds=config["backup_time"]
+        seconds=config["backup_time"],
+        id="iptables.ipset6_save"
     )
     sched.start()
     print("CFW starts running.")
+
+
+def restart():
+    sched.remove_job("block_ss_ip")
+    sched.remove_job("iptables.ipset_save")
+    sched.remove_job("iptables.ipset6_save")
+    start()
