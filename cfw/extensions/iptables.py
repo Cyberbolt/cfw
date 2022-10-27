@@ -114,11 +114,11 @@ class Iplist(list):
 whitelist = Iplist("whitelist.txt")
 
 
-def block_ip(ip: str):
+def block_ip(ip: str, timeout: int = 600):
     for ip_w in whitelist:
         if ipaddress.IPv4Address(ip) in ipaddress.IPv4Network(ip_w):
             return False
-    r = shell(f"ipset add blacklist {ip}")
+    r = shell(f"ipset add blacklist {ip} timeout {timeout}")
     if r != '':
         return False
     return True

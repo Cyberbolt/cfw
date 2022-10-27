@@ -42,15 +42,15 @@ def load_config():
         raise ConfigurationCFWError(
             "'global' was not found in the yaml file."
         )
-    if not config["global"].get("frequency"):
+    if not config.get("frequency"):
         raise ConfigurationCFWError(
             "'frequency' is not set in 'global'."
         )
-    if not config["global"].get("max_num"):
+    if not config.get("max_num"):
         raise ConfigurationCFWError(
             "'max_num' is not set in 'global'."
         )
-    if not config["global"].get("unblock"):
+    if not config.get("unblock"):
         raise ConfigurationCFWError(
             "'unblock' is not set in 'global'."
         )
@@ -70,10 +70,10 @@ def block_ss_ip():
     }).sort_values(by="num", ascending=False, ignore_index=True)
     ips = []
     for index, row in data.iterrows():
-        if row["num"] > config["global"]["max_num"]:
+        if row["num"] > config["max_num"]:
             ips.append(row["client_ip"])
     for ip in ips:
-        iptables.block_ip(ip)
+        iptables.block_ip(ip, config["frequency"])
 
 
 def run():
@@ -86,7 +86,7 @@ def run():
     sched.add_job(
         block_ss_ip, 
         'interval', 
-        seconds=config["global"]["frequency"]
+        seconds=config["frequency"]
     )
     # Save an ipset every 60 seconds.
     sched.add_job(

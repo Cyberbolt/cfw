@@ -1,10 +1,8 @@
-# Take effect globally
-global:
-  # Program running frequency, unit: second
-  frequency: 5
-  # Maximum number of connections running
-  max_num: 1
-  # time to unblock ip
-  unblock: 600
-  whitelist: whitelist.txt
-  blacklist: balack.txt
+# Program running frequency, unit: second
+frequency: 5
+# Maximum number of connections running
+max_num: 1
+# time to unblock ip
+unblock: 600
+whitelist: whitelist.txt
+blacklist: balack.txt
