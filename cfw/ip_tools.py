@@ -84,12 +84,3 @@ def start():
     )
     sched.start()
     print("CFW starts running.")
-
-
-def reload():
-    print(sched.get_jobs())
-    # sched.remove_job("block_ss_ip")
-    # sched.remove_job("iptables.ipset_save")
-    # sched.remove_job("iptables.ipset6_save")
-    # sched.shutdown(wait=False)
-    # start()
