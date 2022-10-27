@@ -2,21 +2,18 @@
     Get and handle socket connections.
 """
 
-import time
-import yaml
+import ipaddress
 
 import numpy as np
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
 
+from .config import config
 from .extensions import iptables, shell
-from .CFWError import ConfigurationCFWError, ListCFWError
-
-with open("config.yaml") as f:
-    config = yaml.load(f, Loader=yaml.FullLoader)
-
+from .CFWError import ListCFWError
 
 rules = iptables.Rules()
+rules6 = iptables.Rules(version=6)
 
 
 def get_ss_ip() -> pd.DataFrame:
@@ -37,25 +34,6 @@ def get_ss_ip() -> pd.DataFrame:
     return data_df
 
 
-def load_config():
-    if not config.get("global"):
-        raise ConfigurationCFWError(
-            "'global' was not found in the yaml file."
-        )
-    if not config.get("frequency"):
-        raise ConfigurationCFWError(
-            "'frequency' is not set in 'global'."
-        )
-    if not config.get("max_num"):
-        raise ConfigurationCFWError(
-            "'max_num' is not set in 'global'."
-        )
-    if not config.get("unblock"):
-        raise ConfigurationCFWError(
-            "'unblock' is not set in 'global'."
-        )
-
-
 def block_blacklist_ip():
     blacklist = iptables.Iplist("blacklist.txt")
     for ip in blacklist:
@@ -73,13 +51,17 @@ def block_ss_ip():
         if row["num"] > config["max_num"]:
             ips.append(row["client_ip"])
     for ip in ips:
-        iptables.block_ip(ip, config["frequency"])
+        version = ipaddress.ip_address(ip).version
+        if version == 4:
+            iptables.block_ip(ip, config["unblock_time"])
+        elif version == 6:
+            iptables.block_ip6(ip, config["unblock_time"])
 
 
 def run():
-    load_config()
     iptables.cfw_init()
     rules.save_rules()
+    rules6.save_rules()
 
     sched = BackgroundScheduler(timezone="Asia/Shanghai")
     # ips are banned periodically.
@@ -92,7 +74,12 @@ def run():
     sched.add_job(
         iptables.ipset_save, 
         'interval', 
-        seconds=60
+        seconds=config["backup_time"]
+    )
+    sched.add_job(
+        iptables.ipset6_save, 
+        'interval', 
+        seconds=config["backup_time"]
     )
     sched.start()
     print("CFW starts running.")

@@ -3,11 +3,16 @@
 """
 
 import os
+import shutil
 import pickle
+import threading
 import ipaddress
 import subprocess
 
+from ..config import config
 from ..CFWError import *
+
+lock = threading.RLock()
 
 
 def shell(cmd: str) -> str:
@@ -94,10 +99,14 @@ class Rules(list):
         for line in self:
             content += line + '\n'
         rules = start + content + end
-        with open(f"cfw/data/rules{self.version}.list", "wb") as f:
+        with open(f"cfw/data/rules{self.version}-backup.list", "wb") as f:
             pickle.dump(self, f)
-        with open(f"/etc/ip{self.version}tables-cfw", "w") as f:
+        shutil.move(f"cfw/data/rules{self.version}-backup.list", 
+                    f"cfw/data/rules{self.version}.list")
+        with open(f"/etc/ip{self.version}tables-cfw-backup", "w") as f:
             f.write(rules)
+        shutil.move(f"/etc/ip{self.version}tables-cfw-backup", 
+                    f"/etc/ip{self.version}tables-cfw")
         shell(f"ip{self.version}tables-restore < /etc/ip{self.version}tables-cfw")
 
 
@@ -136,8 +145,8 @@ class Iplist(list):
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
 
-whitelist = Iplist("whitelist.txt")
-whitelist6 = Iplist("whitelist6.txt", version=6)
+whitelist = Iplist(config["whitelist"])
+whitelist6 = Iplist(config["whitelist6"], version=6)
 
 
 def block_ip(ip: str, timeout: int = 600):
@@ -161,7 +170,7 @@ def block_ip6(ip: str, timeout: int = 600):
     for ip_w in whitelist6:
         if ipaddress.IPv6Address(ip) in ipaddress.IPv6Network(ip_w):
             return False
-    r = shell(f"ipset add blacklist {ip} timeout {timeout}")
+    r = shell(f"ipset add blacklist6 {ip} timeout {timeout}")
     if r != '':
         return False
     return True
@@ -175,11 +184,17 @@ def unblock_ip6(ip: str):
 
 
 def ipset_save():
-    shell("ipset save blacklist -f cfw/data/ipset_blacklist.txt")
+    lock.acquire()
+    shell("ipset save blacklist -f cfw/data/ipset_blacklist-backup.txt")
+    lock.release()
+    shell("mv cfw/data/ipset_blacklist-backup.txt cfw/data/ipset_blacklist.txt")
     
 
 def ipset6_save():
-    shell("ipset save blacklist6 -f cfw/data/ipset_blacklist6.txt")
+    lock.acquire()
+    shell("ipset save blacklist6 -f cfw/data/ipset_blacklist6-backup.txt")
+    lock.release()
+    shell("mv cfw/data/ipset_blacklist6-backup.txt cfw/data/ipset_blacklist6.txt")
 
 
 def cfw_init():

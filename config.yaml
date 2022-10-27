@@ -3,6 +3,16 @@ frequency: 5
 # Maximum number of connections running
 max_num: 1
 # time to unblock ip
-unblock: 600
-whitelist: whitelist.txt
-blacklist: balack.txt
+unblock_time: 600
+# Data backup time
+backup_time: 60
+
+# ipv4 whitelist
+whitelist: ip_list/whitelist.txt
+# ipv4 blacklist
+blacklist: ip_list/balack.txt
+
+# ipv6 whitelist
+whitelist6: ip_list/whitelist6.txt
+# ipv6 blacklist
+blacklist6: ip_list/balack.txt
