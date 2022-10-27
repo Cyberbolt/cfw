@@ -1,5 +1,8 @@
 # custom rules
 cfw/data/rules.list
+cfw/data/rules6.list
+cfw/data/ipset_blacklist.txt
+cfw/data/ipset_blacklist6.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

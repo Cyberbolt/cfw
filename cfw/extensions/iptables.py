@@ -36,7 +36,7 @@ class Rules(list):
     
     def __init__(self, version: int = 4):
         if version == 6:
-            self.version == '6'
+            self.version = '6'
         elif version != 4:
             raise ParameterCFWError("The version number can only be 4 or 6.")
         # If rules.list exists, load the previous configuration file.
@@ -103,11 +103,11 @@ class Rules(list):
             pickle.dump(self, f)
         shutil.move(f"cfw/data/rules{self.version}-backup.list", 
                     f"cfw/data/rules{self.version}.list")
-        with open(f"/etc/ip{self.version}tables-cfw-backup", "w") as f:
+        with open(f"cfw/data/ip{self.version}tables-cfw-backup", "w") as f:
             f.write(rules)
-        shutil.move(f"/etc/ip{self.version}tables-cfw-backup", 
-                    f"/etc/ip{self.version}tables-cfw")
-        shell(f"ip{self.version}tables-restore < /etc/ip{self.version}tables-cfw")
+        shutil.move(f"cfw/data/ip{self.version}tables-cfw-backup", 
+                    f"cfw/data/ip{self.version}tables-cfw")
+        shell(f"ip{self.version}tables-restore < cfw/data/ip{self.version}tables-cfw")
 
 
 class Iplist(list):
@@ -119,7 +119,7 @@ class Iplist(list):
             path: Path to the whitelist file
         """
         if version == 6:
-            self.version == '6'
+            self.version = '6'
         elif version != 4:
             raise ParameterCFWError("The version number can only be 4 or 6.")
         
