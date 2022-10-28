@@ -16,6 +16,9 @@ async def startup_event():
     items.append(rules6)
 
 
+"""
+    ipv4
+"""
 @app.get("/allow_port")
 def allow_port(port: str, protocol: str):
     rules, rules6 = items
@@ -58,10 +61,64 @@ def status_port():
     ports = []
     for rule in rules.data:
         if 'tcp' in rule:
-            port = rule.split("--dport ")[1].split(" -j")[0] + "/tcp"
+            port = (rule.split("--dport ")[1].split(" -j")[0], "tcp")
             ports.append(port)
         elif 'udp' in rule:
-            port = rule.split("--dport ")[1].split(" -j")[0] + "/udp"
+            port = (rule.split("--dport ")[1].split(" -j")[0], "udp")
+            ports.append(port)
+    ports = set(ports)
+    return {"code": 1, "message": ports}
+
+
+"""
+    ipv6
+"""
+@app.get("/allow_port6")
+def allow_port6(port: str, protocol: str):
+    rules, rules6 = items
+    if protocol == "all":
+        r_tcp = rules6.add_tcp_port(port)
+        r_udp = rules6.add_udp_port(port)
+        if not r_tcp and not r_udp:
+            return {"code": 0, "message": f"{port} port tcp/udp is already open."}
+    elif protocol == "tcp":
+        if not rules6.add_tcp_port(port):
+            return {"code": 0, "message": f"{port} port tcp is already open."}
+    elif protocol == "udp":
+        if not rules6.add_udp_port(port):
+            return {"code": 0, "message": f"{port} port udp is already open."}
+    rules6.save_rules()
+    return {"code": 1}
+
+
+@app.get("/deny_port6")
+def deny_port6(port: str, protocol: str):
+    rules, rules6 = items
+    if protocol == "all":
+        r_tcp = rules6.rm_tcp_port(port)
+        r_udp = rules6.rm_udp_port(port)
+        if not r_tcp and not r_udp:
+            return {"code": 0, "message": f"{port} port tcp/udp has been closed."}
+    elif protocol == "tcp":
+        if not rules6.rm_tcp_port(port):
+            return {"code": 0, "message": f"{port} port tcp has been closed."}
+    elif protocol == "udp":
+        if not rules6.rm_udp_port(port):
+            return {"code": 0, "message": f"{port} port udp has been closed."}
+    rules6.save_rules()
+    return {"code": 1}
+
+
+@app.get("/status6")
+def status_port6():
+    rules, rules6 = items
+    ports = []
+    for rule in rules6.data:
+        if 'tcp' in rule:
+            port = (rule.split("--dport ")[1].split(" -j")[0], "tcp")
+            ports.append(port)
+        elif 'udp' in rule:
+            port = (rule.split("--dport ")[1].split(" -j")[0], "udp")
             ports.append(port)
     ports = set(ports)
     return {"code": 1, "message": ports}
