@@ -4,7 +4,7 @@ After=multi-user.target network.target nss-lookup.target
 [Service]
 User=root
 WorkingDirectory=/data/wwwroot/domian.com
-ExecStart=/etc/cfw/venv/bin/python /python_dev/自创功能模块/cfw/server.py
+ExecStart=/etc/cfw/venv/bin/python /etc/cfw/server.py
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target

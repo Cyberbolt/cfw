@@ -1,5 +1,3 @@
-from typing import List
-
 import uvicorn
 from fastapi import FastAPI
 
@@ -169,4 +167,4 @@ def status_port6():
 
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", port=cfw.config["port"], reload=False)
+    uvicorn.run("server:app", port=cfw.config["port"])
