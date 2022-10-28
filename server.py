@@ -17,7 +17,51 @@ async def startup_event():
 
 
 """
-    ipv4
+    ipv4 block / unblock
+"""
+@app.get("/block_ip")
+def block_ip(ip: str, timeout: int):
+    return cfw.block_ip(ip, timeout)
+
+
+@app.get("/unblock_ip")
+def block_ip(ip: str):
+    return cfw.unblock_ip(ip)
+
+
+@app.get("/blacklist")
+def blacklist():
+    text = cfw.shell("ipset list blacklist")
+    return {
+        "code": 1,
+        "message": text
+    }
+
+
+"""
+    ipv6 block / unblock
+"""
+@app.get("/block_ip6")
+def block_ip6(ip: str, timeout: int):
+    return cfw.block_ip6(ip, timeout)
+
+
+@app.get("/unblock_ip6")
+def block_ip6(ip: str):
+    return cfw.unblock_ip6(ip)
+
+
+@app.get("/blacklist6")
+def blacklist6():
+    text = cfw.shell("ipset list blacklist6")
+    return {
+        "code": 1,
+        "message": text
+    }
+
+
+"""
+    ipv4 port
 """
 @app.get("/allow_port")
 def allow_port(port: str, protocol: str):
@@ -71,7 +115,7 @@ def status_port():
 
 
 """
-    ipv6
+    ipv6 port
 """
 @app.get("/allow_port6")
 def allow_port6(port: str, protocol: str):

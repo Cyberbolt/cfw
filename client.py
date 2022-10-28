@@ -1,3 +1,5 @@
+import re
+
 import httpx
 import click
 import pandas as pd
@@ -16,7 +18,87 @@ def cli():
 
 
 """
-    ipv4
+    ipv4 block / unblock
+"""
+@cli.command(help="block ip")
+@click.argument("ip", type=str)
+@click.option("-t", "--timeout", default=600, type=int)
+def block(ip: str, timeout: int):
+    if timeout > 2000000:
+        raise ParameterCFWError("The maximum ban time cannot exceed 2,000,000 seconds. If you want to ban permanently, please use 0 instead.")
+    r = httpx.get(f"http://127.0.0.1:{config['port']}/block_ip", 
+                  params={"ip": ip, "timeout": timeout})
+    if r.json()["code"]:
+        pass
+    else:
+        print(r.json()["message"])
+        
+
+@cli.command(help="unblock ip")
+@click.argument("ip", type=str)
+def unblock(ip: str):
+    r = httpx.get(f"http://127.0.0.1:{config['port']}/unblock_ip", 
+                  params={"ip": ip})
+    if r.json()["code"]:
+        pass
+    else:
+        print(r.json()["message"])
+
+
+@cli.command(help="blacklist ip")
+def blacklist():
+    r = httpx.get(f"http://127.0.0.1:{config['port']}/blacklist")
+    text = r.json()["message"]
+    ips = []
+    for element in text.split("Members:\n")[1].strip().split("\n"):
+        ip, timeout = element.split(" timeout ")
+        ips.append([ip, timeout])
+    data = pd.DataFrame(ips, columns=["blacklist", "timeout"])
+    print(data.to_string(index=False))
+
+
+"""
+    ipv6 block / unblock
+"""
+@cli.command(help="block ipv6")
+@click.argument("ip", type=str)
+@click.option("-t", "--timeout", default=600, type=int)
+def block6(ip: str, timeout: int):
+    if timeout > 2000000:
+        raise ParameterCFWError("The maximum ban time cannot exceed 2,000,000 seconds. If you want to ban permanently, please use 0 instead.")
+    r = httpx.get(f"http://127.0.0.1:{config['port']}/block_ip6", 
+                  params={"ip": ip, "timeout": timeout})
+    if r.json()["code"]:
+        pass
+    else:
+        print(r.json()["message"])
+        
+
+@cli.command(help="unblock ipv6")
+@click.argument("ip", type=str)
+def unblock6(ip: str):
+    r = httpx.get(f"http://127.0.0.1:{config['port']}/unblock_ip6", 
+                  params={"ip": ip})
+    if r.json()["code"]:
+        pass
+    else:
+        print(r.json()["message"])
+
+
+@cli.command(help="blacklist ipv6")
+def blacklist6():
+    r = httpx.get(f"http://127.0.0.1:{config['port']}/blacklist6")
+    text = r.json()["message"]
+    ips = []
+    for element in text.split("Members:\n")[1].strip().split("\n"):
+        ip, timeout = element.split(" timeout ")
+        ips.append([ip, timeout])
+    data = pd.DataFrame(ips, columns=["blacklist6", "timeout"])
+    print(data.to_string(index=False))
+
+
+"""
+    ipv4 port
 """
 @cli.command(help="allow port")
 @click.argument("port", type=str)
@@ -79,7 +161,7 @@ def status():
 
 
 """
-    ipv6
+    ipv6 port
 """
 @cli.command(help="allow port")
 @click.argument("port", type=str)

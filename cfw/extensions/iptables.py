@@ -22,7 +22,8 @@ def shell(cmd: str) -> str:
     r = subprocess.run(
         cmd, 
         shell=True,
-        capture_output=True
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
     )
     return r.stdout.decode()
 
@@ -161,35 +162,61 @@ whitelist6 = Iplist(config["whitelist6"], version=6)
 def block_ip(ip: str, timeout: int = 600):
     for ip_w in whitelist:
         if ipaddress.IPv4Address(ip) in ipaddress.IPv4Network(ip_w):
-            return False
+            return {
+                "code": 0,
+                "message": "This ip is in the whitelist and cannot be blocked."
+            }
     r = shell(f"ipset add blacklist {ip} timeout {timeout}")
     if r != '':
-        return False
-    return True
+        return {
+            "code": 0,
+            "message": "This ip has been blocked."
+        }
+    return {
+        "code": 1
+    }
 
 
 def unblock_ip(ip: str):
     r = shell(f"ipset del blacklist {ip}")
     if r != '':
-        return False
-    return True
+        return {
+            "code": 0,
+            "message": "The ip is not blocked."
+        }
+    return {
+        "code": 1
+    }
 
 
 def block_ip6(ip: str, timeout: int = 600):
     for ip_w in whitelist6:
         if ipaddress.IPv6Address(ip) in ipaddress.IPv6Network(ip_w):
-            return False
+            return {
+                "code": 0,
+                "message": "This ip is in the whitelist and cannot be blocked."
+            }
     r = shell(f"ipset add blacklist6 {ip} timeout {timeout}")
     if r != '':
-        return False
-    return True
+        return {
+            "code": 0,
+            "message": "This ip has been blocked."
+        }
+    return {
+        "code": 1
+    }
 
 
 def unblock_ip6(ip: str):
     r = shell(f"ipset del blacklist6 {ip}")
     if r != '':
-        return False
-    return True
+        return {
+            "code": 0,
+            "message": "The ip is not blocked."
+        }
+    return {
+        "code": 1
+    }
 
 
 def ipset_save():
