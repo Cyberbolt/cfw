@@ -3,16 +3,15 @@
 """
 
 import ipaddress
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
+from apscheduler.schedulers.background import BackgroundScheduler
 
-from .config import config, sched
+from .config import config
 from .extensions import iptables, shell
 from .CFWError import ListCFWError
-
-rules = iptables.Rules()
-rules6 = iptables.Rules(version=6)
 
 
 def get_ss_ip() -> pd.DataFrame:
@@ -57,11 +56,14 @@ def block_ss_ip():
             iptables.block_ip6(ip, config["unblock_time"])
 
 
-def start():
+def start() -> Tuple[iptables.Rules, iptables.Rules]:
     iptables.cfw_init()
+    rules = iptables.Rules()
+    rules6 = iptables.Rules(version=6)
     rules.save_rules()
     rules6.save_rules()
 
+    sched = BackgroundScheduler(timezone="Asia/Shanghai")
     # ips are banned periodically.
     sched.add_job(
         block_ss_ip, 
@@ -84,3 +86,4 @@ def start():
     )
     sched.start()
     print("CFW starts running.")
+    return rules, rules6

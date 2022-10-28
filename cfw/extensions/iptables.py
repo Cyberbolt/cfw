@@ -33,6 +33,7 @@ class Rules(list):
     """
     
     version = ''
+    data = []
     
     def __init__(self, version: int = 4):
         if version == 6:
@@ -42,65 +43,65 @@ class Rules(list):
         # If rules.list exists, load the previous configuration file.
         if os.path.exists(f"cfw/data/rules{self.version}.list"):
             with open(f"cfw/data/rules{self.version}.list", "rb") as f:
-                self = pickle.load(f)
+                self.data = pickle.load(f)
             return
         # New configuration file
         ssh_port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
         if ssh_port == '\n':
             ssh_port = None
         if ssh_port:
-            self.append(f"ip{self.version}tables -A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.append(f"ip{self.version}tables -A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.append(f"ip{self.version}tables -A INPUT -i lo -j ACCEPT")
-            self.append(f"ip{self.version}tables -A OUTPUT -o lo -j ACCEPT")
-            self.append(f"ip{self.version}tables -P INPUT DROP")
-            self.append(f"ip{self.version}tables -P FORWARD DROP")
-            self.append(f"ip{self.version}tables -P OUTPUT DROP")
+            self.data.append(f"ip{self.version}tables -A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
+            self.data.append(f"ip{self.version}tables -A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
+            self.data.append(f"ip{self.version}tables -A INPUT -i lo -j ACCEPT")
+            self.data.append(f"ip{self.version}tables -A OUTPUT -o lo -j ACCEPT")
+            self.data.append(f"ip{self.version}tables -P INPUT DROP")
+            self.data.append(f"ip{self.version}tables -P FORWARD DROP")
+            self.data.append(f"ip{self.version}tables -P OUTPUT DROP")
         else:
-            self.append(f"ip{self.version}tables -A INPUT -i lo -j ACCEPT")
-            self.append(f"ip{self.version}tables -A OUTPUT -o lo -j ACCEPT")
-            self.append(f"ip{self.version}tables -P INPUT DROP")
-            self.append(f"ip{self.version}tables -P FORWARD DROP")
-            self.append(f"ip{self.version}tables -P OUTPUT DROP")
-        self.append(f"ip{self.version}tables -I INPUT -m set --match-set blacklist src -j DROP")
+            self.data.append(f"ip{self.version}tables -A INPUT -i lo -j ACCEPT")
+            self.data.append(f"ip{self.version}tables -A OUTPUT -o lo -j ACCEPT")
+            self.data.append(f"ip{self.version}tables -P INPUT DROP")
+            self.data.append(f"ip{self.version}tables -P FORWARD DROP")
+            self.data.append(f"ip{self.version}tables -P OUTPUT DROP")
+        self.data.append(f"ip{self.version}tables -I INPUT -m set --match-set blacklist src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT" in self:
+        if f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT" in self.data:
             return False
-        self.insert(0, f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT")
-        self.insert(0, f"ip{self.version}tables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"ip{self.version}tables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
         return True
         
     def rm_tcp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT" not in self:
+        if f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT" not in self.data:
             return False
-        self.remove(f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT")
-        self.remove(f"ip{self.version}tables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.remove(f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.remove(f"ip{self.version}tables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
         return True
         
     def add_udp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT" in self:
+        if f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT" in self.data:
             return False
-        self.insert(0, f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT")
-        self.insert(0, f"ip{self.version}tables -A OUTPUT -p udp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"ip{self.version}tables -A OUTPUT -p udp --dport {port} -j ACCEPT")
         return True
         
     def rm_udp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT" not in self:
+        if f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT" not in self.data:
             return False
-        self.remove(f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT")
-        self.remove(f"ip{self.version}tables -A OUTPUT -p udp --dport {port} -j ACCEPT")
+        self.data.remove(f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT")
+        self.data.remove(f"ip{self.version}tables -A OUTPUT -p udp --dport {port} -j ACCEPT")
         return True
         
     def save_rules(self):
         start = "*filter\n"
         end = "COMMIT"
         content = ''
-        for line in self:
+        for line in self.data:
             content += line + '\n'
         rules = start + content + end
         with open(f"cfw/data/rules{self.version}-backup.list", "wb") as f:
-            pickle.dump(self, f)
+            pickle.dump(self.data, f)
         shutil.move(f"cfw/data/rules{self.version}-backup.list", 
                     f"cfw/data/rules{self.version}.list")
         with open(f"cfw/data/ip{self.version}tables-cfw-backup", "w") as f:
