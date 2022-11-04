@@ -82,6 +82,23 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 reference = "aliyun"
 
 [[package]]
+name = "clock-timer"
+version = "0.1.6"
+description = "clock_timer 是 Python 下的时间库，用于时间字符串处理，可在 Web 开发、数据分析 等领域使用。该库 80% 基于 datetime ，使用该库，您能更人性化地处理时间字符串，而无需每次查询 datetime 繁琐的接口。该库主要用于时间加减计算、获取时间对应的周数和星座、获取当前时间、获取时间戳、时间戳和时间字符串的转换 等功能。后期仍会不断优化，欢迎留言。"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+python-dateutil = ">=2.8.2"
+six = ">=1.16.0"
+
+[package.source]
+type = "legacy"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+reference = "aliyun"
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -545,7 +562,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "4157d6aa6c110a833ec680e4a915c86622337d28fb99b36c57e82104f80138f7"
+content-hash = "5e1ac9bd61b8927fbb2fc8ea1d56c812fccb740a5b34a5f5fcc1f83cdb45d19c"
 
 [metadata.files]
 anyio = [
@@ -563,6 +580,10 @@ certifi = [
 click = [
     {file = "click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
     {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
+]
+clock-timer = [
+    {file = "clock_timer-0.1.6-py3-none-any.whl", hash = "sha256:7573f7593961383d275ca659acfd854c62e805bf0111c000f6ce8dc168b94046"},
+    {file = "clock_timer-0.1.6.tar.gz", hash = "sha256:de6cde8985a155fba1813ea8b418a0ce6988826cf819606267fe0d03a7916d4b"},
 ]
 colorama = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},

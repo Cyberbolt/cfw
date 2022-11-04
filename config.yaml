@@ -18,3 +18,6 @@ blacklist: ip_list/balack.txt
 whitelist6: ip_list/whitelist6.txt
 # ipv6 blacklist
 blacklist6: ip_list/balack.txt
+
+# log file path
+log_file_path: log/log.csv

@@ -44,6 +44,10 @@ def load_config():
         raise ConfigurationCFWError(
             "The 'blacklist6' parameter does not exist."
         )
+    if not config.get("log_file_path"):
+        raise ConfigurationCFWError(
+            "The 'log_file_path' parameter does not exist."
+        )
 
 
 load_config()
