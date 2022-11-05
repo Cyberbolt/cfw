@@ -36,7 +36,7 @@ def main():
     cmd("/root/miniforge3/bin/conda create -n py39 python=3.9.12 -y")
     cmd("mv /root/miniforge3/envs/py39 /etc/cfw/py39")
     # Install Python dependencies
-    cmd("/etc/cfw/py39/bin/python -m pip install -r requirements.txt")
+    cmd("/etc/cfw/py39/bin/python -m pip install -r /etc/cfw/requirements.txt")
     # run with systemd
     cmd("cp cfw.service /etc/systemd/system/cfw.service")
     cmd("systemctl daemon-reload")
