@@ -1,6 +1,6 @@
 from .ip_tools import start
 from .extensions.iptables import (
-    shell, Rules, 
+    shell, cmd, Rules, 
     block_ip, unblock_ip, 
     block_ip6, unblock_ip6
 )

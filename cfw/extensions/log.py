@@ -1,10 +1,23 @@
 import os
 import csv
+import subprocess
 
 from clock_timer import timer
 
-from .iptables import shell
 from ..config import config
+
+
+def shell(cmd: str) -> str:
+    """
+        Execute a shell statement and return the output.
+    """
+    r = subprocess.run(
+        cmd, 
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
+    )
+    return r.stdout.decode()
 
 
 class Log:

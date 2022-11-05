@@ -4,7 +4,7 @@ import httpx
 import click
 import pandas as pd
 
-from cfw import shell, config, ParameterCFWError
+from cfw import cmd, config, ParameterCFWError
 
 # Show all columns and rows.
 pd.set_option('display.max_columns', None)
@@ -221,6 +221,15 @@ def status6():
         return
     data = pd.DataFrame(data, columns=["port", "protocol"])
     print(data.sort_values("port").to_string(index=False))
+
+
+"""
+    Log
+"""
+@cli.command(help="cfw log")
+@click.argument("num", type=str)
+def log(num: int = 1000):
+    cmd(f"tail -f -n {num} {config['log_file_path']}")
 
 
 if __name__ == '__main__':

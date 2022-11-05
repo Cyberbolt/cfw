@@ -3,6 +3,7 @@
 """
 
 import os
+import sys
 import shutil
 import pickle
 import threading
@@ -14,6 +15,18 @@ from ..config import config
 from ..CFWError import *
 
 lock = threading.RLock()
+
+
+def cmd(cmd: str):
+    try:
+        subprocess.run(
+            cmd, 
+            shell=True,
+            check=True
+        )
+        return True
+    except subprocess.CalledProcessError as e:
+        sys.exit(1)
 
 
 def shell(cmd: str) -> str:
