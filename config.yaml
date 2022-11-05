@@ -21,3 +21,4 @@ blacklist6: ip_list/balack.txt
 
 # log file path
 log_file_path: log/log.csv
+log_max_lines: 10000000

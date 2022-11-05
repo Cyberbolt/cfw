@@ -8,7 +8,7 @@ items = []
 
 
 @app.on_event("startup")
-async def startup_event():
+def startup_event():
     rules, rules6 = cfw.start()
     items.append(rules)
     items.append(rules6)
@@ -19,12 +19,12 @@ async def startup_event():
 """
 @app.get("/block_ip")
 def block_ip(ip: str, timeout: int):
-    return cfw.block_ip(ip, timeout)
+    return cfw.block_ip(ip, timeout, "user")
 
 
 @app.get("/unblock_ip")
-def block_ip(ip: str):
-    return cfw.unblock_ip(ip)
+def unblock_ip(ip: str):
+    return cfw.unblock_ip(ip, "user")
 
 
 @app.get("/blacklist")
@@ -41,12 +41,12 @@ def blacklist():
 """
 @app.get("/block_ip6")
 def block_ip6(ip: str, timeout: int):
-    return cfw.block_ip6(ip, timeout)
+    return cfw.block_ip6(ip, timeout, "user")
 
 
 @app.get("/unblock_ip6")
-def block_ip6(ip: str):
-    return cfw.unblock_ip6(ip)
+def unblock_ip6(ip: str):
+    return cfw.unblock_ip6(ip, "user")
 
 
 @app.get("/blacklist6")

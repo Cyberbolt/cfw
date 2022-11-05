@@ -9,6 +9,7 @@ import threading
 import ipaddress
 import subprocess
 
+from .log import Log
 from ..config import config
 from ..CFWError import *
 
@@ -157,9 +158,10 @@ class Iplist(list):
 
 whitelist = Iplist(config["whitelist"])
 whitelist6 = Iplist(config["whitelist6"], version=6)
+log = Log()
 
 
-def block_ip(ip: str, timeout: int = 600):
+def block_ip(ip: str, timeout: int = 600, type: str = 'cfw'):
     for ip_w in whitelist:
         if ipaddress.IPv4Address(ip) in ipaddress.IPv4Network(ip_w):
             return {
@@ -172,24 +174,26 @@ def block_ip(ip: str, timeout: int = 600):
             "code": 0,
             "message": "This ip has been blocked."
         }
+    log.write(type, f"block {ip}")
     return {
         "code": 1
     }
 
 
-def unblock_ip(ip: str):
+def unblock_ip(ip: str, type: str = 'cfw'):
     r = shell(f"ipset del blacklist {ip}")
     if r != '':
         return {
             "code": 0,
             "message": "The ip is not blocked."
         }
+    log.write(type, f"unblock {ip}")
     return {
         "code": 1
     }
 
 
-def block_ip6(ip: str, timeout: int = 600):
+def block_ip6(ip: str, timeout: int = 600, type: str = 'cfw'):
     for ip_w in whitelist6:
         if ipaddress.IPv6Address(ip) in ipaddress.IPv6Network(ip_w):
             return {
@@ -202,18 +206,20 @@ def block_ip6(ip: str, timeout: int = 600):
             "code": 0,
             "message": "This ip has been blocked."
         }
+    log.write(type, f"block {ip}")
     return {
         "code": 1
     }
 
 
-def unblock_ip6(ip: str):
+def unblock_ip6(ip: str, type: str = 'cfw'):
     r = shell(f"ipset del blacklist6 {ip}")
     if r != '':
         return {
             "code": 0,
             "message": "The ip is not blocked."
         }
+    log.write(type, f"unblock {ip}")
     return {
         "code": 1
     }
