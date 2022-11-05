@@ -42,6 +42,8 @@ def main():
     cmd("systemctl daemon-reload")
     cmd("systemctl enable cfw")
     cmd("systemctl start cfw")
+    # add environment variable
+    cmd('echo alias cfw="/etc/cfw/py39/bin/python /etc/cfw/client.py">>~/.bashrc')
 
 
 if __name__ == "__main__":
