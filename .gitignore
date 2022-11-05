@@ -5,6 +5,7 @@ cfw/data/ipset_blacklist.txt
 cfw/data/ipset_blacklist6.txt
 cfw/data/iptables-cfw
 cfw/data/ip6tables-cfw
+log/log.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
