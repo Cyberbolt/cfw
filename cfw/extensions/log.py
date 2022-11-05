@@ -30,7 +30,7 @@ class Log:
     
     def write(self, type: str, content: str):
         if config["log_max_lines"] != 0:
-            lines_num = shell(f'wc -l {config["log_file_path"]}').split(' ', 1)[0]
+            lines_num = int(shell(f'wc -l {config["log_file_path"]}').split(' ', 1)[0])
             if lines_num > config["log_max_lines"]:
                 shell(f'sed -i "2d" {config["log_file_path"]}')
         with open(config["log_file_path"], "a") as csvfile:
