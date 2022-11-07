@@ -29,22 +29,27 @@ def shell(cmd: str) -> str:
 
 
 def main():
-    cmd("git clone https://github.com/Cyberbolt/cfw.git /etc/cfw")
-    # Install Miniforge 3
-    cmd('curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"')
-    cmd("bash Miniforge3-$(uname)-$(uname -m).sh -b")
-    cmd("/root/miniforge3/bin/conda create -n py39 python=3.9.12 -y")
-    cmd("mv /root/miniforge3/envs/py39 /etc/cfw/py39")
+    # clone cfw
+    cmd("git clone https://github.com/Cyberbolt/cfw.git /etc/cfw/")
+    # choose linux architecture
+    architecture = shell("uname -m").strip()
+    if architecture == "x86_64":
+        cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-x86_64.tar.gz")
+    if architecture == "aarch64":
+        cmd("")
+    # Unzip the python3.9 version
+    cmd("tar -zxvf py39-Linux-x86_64.tar.gz")
+    cmd("mv py39 /etc/cfw/py39")
+    cmd("rm -rf py39-Linux-x86_64.tar.gz")
     # Install Python dependencies
     cmd("/etc/cfw/py39/bin/python -m pip install -r /etc/cfw/requirements.txt")
     # run with systemd
-    cmd("cp cfw.service /etc/systemd/system/cfw.service")
+    cmd("cp /etc/cfw/cfw.service /etc/systemd/system/cfw.service")
     cmd("systemctl daemon-reload")
     cmd("systemctl enable cfw")
     cmd("systemctl start cfw")
     # add environment variable
     cmd('echo alias cfw="/etc/cfw/py39/bin/python /etc/cfw/client.py">>~/.bashrc')
-
 
 if __name__ == "__main__":
     main()
