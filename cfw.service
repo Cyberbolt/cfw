@@ -3,7 +3,7 @@ Description=CFW Sercice
 After=multi-user.target network.target nss-lookup.target
 [Service]
 User=root
-WorkingDirectory=/data/wwwroot/domian.com
+WorkingDirectory=/etc/cfw
 ExecStart=/etc/cfw/py39/bin/python /etc/cfw/server.py
 Restart=on-failure
 [Install]
