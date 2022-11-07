@@ -24,6 +24,10 @@ class Log:
     
     def __init__(self):
         if not os.path.exists(config["log_file_path"]):
+            path = config["log_file_path"].rsplit("/", 1)
+            if len(path) > 1:
+                dir, file_name = path
+                os.mkdir(dir)
             with open(config["log_file_path"], "w") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(["time", "type", "content"])
