@@ -36,7 +36,7 @@ def main():
     if architecture == "x86_64":
         cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-x86_64.tar.gz")
     if architecture == "aarch64":
-        cmd("")
+        cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-aarch64.tar.gz")
     # Unzip the python3.9 version
     cmd("tar -zxvf py39-Linux-x86_64.tar.gz")
     cmd("mv py39 /etc/cfw/py39")
