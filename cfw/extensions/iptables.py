@@ -110,7 +110,7 @@ class Rules(list):
         
     def save_rules(self):
         start = "*filter\n"
-        end = "COMMIT"
+        end = "COMMIT\n"
         content = ''
         for line in self.data:
             content += line + '\n'
