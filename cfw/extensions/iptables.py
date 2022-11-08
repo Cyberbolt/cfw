@@ -48,9 +48,9 @@ class Rules(list):
     """
     
     version = ''
-    data = []
     
     def __init__(self, version: int = 4):
+        self.data = []
         if version == 6:
             self.version = '6'
         elif version != 4:
@@ -65,47 +65,47 @@ class Rules(list):
         if ssh_port == '\n':
             ssh_port = None
         if ssh_port:
-            self.data.append(f"ip{self.version}tables -A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.data.append(f"ip{self.version}tables -A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.data.append(f"ip{self.version}tables -A INPUT -i lo -j ACCEPT")
-            self.data.append(f"ip{self.version}tables -A OUTPUT -o lo -j ACCEPT")
-            self.data.append(f"ip{self.version}tables -P INPUT DROP")
-            self.data.append(f"ip{self.version}tables -P FORWARD DROP")
-            self.data.append(f"ip{self.version}tables -P OUTPUT DROP")
+            self.data.append(f"-A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
+            self.data.append(f"-A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
+            self.data.append(f"-A INPUT -i lo -j ACCEPT")
+            self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
+            self.data.append(f"-P INPUT DROP")
+            self.data.append(f"-P FORWARD DROP")
+            self.data.append(f"-P OUTPUT DROP")
         else:
-            self.data.append(f"ip{self.version}tables -A INPUT -i lo -j ACCEPT")
-            self.data.append(f"ip{self.version}tables -A OUTPUT -o lo -j ACCEPT")
-            self.data.append(f"ip{self.version}tables -P INPUT DROP")
-            self.data.append(f"ip{self.version}tables -P FORWARD DROP")
-            self.data.append(f"ip{self.version}tables -P OUTPUT DROP")
-        self.data.append(f"ip{self.version}tables -I INPUT -m set --match-set blacklist src -j DROP")
+            self.data.append(f"-A INPUT -i lo -j ACCEPT")
+            self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
+            self.data.append(f"-P INPUT DROP")
+            self.data.append(f"-P FORWARD DROP")
+            self.data.append(f"-P OUTPUT DROP")
+        self.data.append(f"-I INPUT -m set --match-set blacklist src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT" in self.data:
+        if f"-A INPUT -p tcp --dport {port} -j ACCEPT" in self.data:
             return False
-        self.data.insert(0, f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT")
-        self.data.insert(0, f"ip{self.version}tables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"-A INPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"-A OUTPUT -p tcp --dport {port} -j ACCEPT")
         return True
         
     def rm_tcp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT" not in self.data:
+        if f"-A INPUT -p tcp --dport {port} -j ACCEPT" not in self.data:
             return False
-        self.data.remove(f"ip{self.version}tables -A INPUT -p tcp --dport {port} -j ACCEPT")
-        self.data.remove(f"ip{self.version}tables -A OUTPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.remove(f"-A INPUT -p tcp --dport {port} -j ACCEPT")
+        self.data.remove(f"-A OUTPUT -p tcp --dport {port} -j ACCEPT")
         return True
         
     def add_udp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT" in self.data:
+        if f"-A INPUT -p udp --dport {port} -j ACCEPT" in self.data:
             return False
-        self.data.insert(0, f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT")
-        self.data.insert(0, f"ip{self.version}tables -A OUTPUT -p udp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"-A INPUT -p udp --dport {port} -j ACCEPT")
+        self.data.insert(0, f"-A OUTPUT -p udp --dport {port} -j ACCEPT")
         return True
         
     def rm_udp_port(self, port: str) -> bool:
-        if f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT" not in self.data:
+        if f"-A INPUT -p udp --dport {port} -j ACCEPT" not in self.data:
             return False
-        self.data.remove(f"ip{self.version}tables -A INPUT -p udp --dport {port} -j ACCEPT")
-        self.data.remove(f"ip{self.version}tables -A OUTPUT -p udp --dport {port} -j ACCEPT")
+        self.data.remove(f"-A INPUT -p udp --dport {port} -j ACCEPT")
+        self.data.remove(f"-A OUTPUT -p udp --dport {port} -j ACCEPT")
         return True
         
     def save_rules(self):
