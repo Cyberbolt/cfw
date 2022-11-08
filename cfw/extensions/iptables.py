@@ -69,16 +69,13 @@ class Rules(list):
             self.data.append(f"-A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
             self.data.append(f"-A INPUT -i lo -j ACCEPT")
             self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
-            self.data.append(f"-P INPUT DROP")
-            self.data.append(f"-P FORWARD DROP")
-            self.data.append(f"-P OUTPUT DROP")
         else:
             self.data.append(f"-A INPUT -i lo -j ACCEPT")
             self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
-            self.data.append(f"-P INPUT DROP")
-            self.data.append(f"-P FORWARD DROP")
-            self.data.append(f"-P OUTPUT DROP")
-        self.data.append(f"-I INPUT -m set --match-set blacklist src -j DROP")
+        shell(f"ip{self.version}tables -P INPUT DROP")
+        shell(f"ip{self.version}tables -P FORWARD DROP")
+        shell(f"ip{self.version}tables -P OUTPUT DROP")
+        self.data.append(f"-I INPUT -m set --match-set blacklist{self.version} src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
         if f"-A INPUT -p tcp --dport {port} -j ACCEPT" in self.data:
