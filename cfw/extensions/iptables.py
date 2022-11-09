@@ -62,48 +62,44 @@ class Rules(list):
             return
         # New configuration file
         ssh_port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'").rstrip()
-        
         if ssh_port == '\n':
             ssh_port = None
         if ssh_port:
             self.data.append(f"-A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.data.append(f"-A OUTPUT -p tcp --sport {ssh_port} -j ACCEPT")
-        self.data.append(f"-A INPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        self.data.append(f"-A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        self.data.append(f"-A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        self.data.append(f"-A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
-        # self.data.append(f"-P INPUT DROP")
-        # self.data.append(f"-P FORWARD DROP")
-        # self.data.append(f"-P OUTPUT DROP")
-        
+            # self.data.append(f"-A OUTPUT -p tcp --sport {ssh_port} -j ACCEPT")
+        self.data.append(f"-A INPUT -i lo -j ACCEPT")
+        self.data.append(f"-A INPUT -p tcp -m multiport --dports 0:65535 -j DROP")
+        # self.data.append(f"-A OUTPUT -p tcp -m multiport -dport 0:65535 -j DROP")
+        self.data.append(f"-A INPUT -p udp -m multiport -dport 0:65535 -j DROP")
+        # self.data.append(f"-A OUTPUT -p udp -m multiport -dport 0:65535 -j DROP")
         self.data.append(f"-I INPUT -m set --match-set blacklist{self.version} src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
         if f"-A INPUT -p tcp --dport {port} -j ACCEPT" in self.data:
             return False
         self.data.insert(0, f"-A INPUT -p tcp --dport {port} -j ACCEPT")
-        self.data.insert(0, f"-A OUTPUT -p tcp --sport {port} -j ACCEPT")
+        # self.data.insert(0, f"-A OUTPUT -p tcp --sport {port} -j ACCEPT")
         return True
         
     def rm_tcp_port(self, port: str) -> bool:
         if f"-A INPUT -p tcp --dport {port} -j ACCEPT" not in self.data:
             return False
         self.data.remove(f"-A INPUT -p tcp --dport {port} -j ACCEPT")
-        self.data.remove(f"-A OUTPUT -p tcp --sport {port} -j ACCEPT")
+        # self.data.remove(f"-A OUTPUT -p tcp --sport {port} -j ACCEPT")
         return True
         
     def add_udp_port(self, port: str) -> bool:
         if f"-A INPUT -p udp --dport {port} -j ACCEPT" in self.data:
             return False
         self.data.insert(0, f"-A INPUT -p udp --dport {port} -j ACCEPT")
-        self.data.insert(0, f"-A OUTPUT -p udp --sport {port} -j ACCEPT")
+        # self.data.insert(0, f"-A OUTPUT -p udp --sport {port} -j ACCEPT")
         return True
         
     def rm_udp_port(self, port: str) -> bool:
         if f"-A INPUT -p udp --dport {port} -j ACCEPT" not in self.data:
             return False
         self.data.remove(f"-A INPUT -p udp --dport {port} -j ACCEPT")
-        self.data.remove(f"-A OUTPUT -p udp --sport {port} -j ACCEPT")
+        # self.data.remove(f"-A OUTPUT -p udp --sport {port} -j ACCEPT")
         return True
         
     def save_rules(self):
