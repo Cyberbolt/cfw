@@ -3,7 +3,7 @@ port: 6680
 # Program running frequency, unit: second
 frequency: 5
 # Maximum number of connections running
-max_num: 1
+max_num: 100
 # time to unblock ip
 unblock_time: 600
 # Data backup time
