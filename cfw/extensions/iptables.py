@@ -72,6 +72,10 @@ class Rules(list):
         # self.data.append(f"-A OUTPUT -p tcp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
         self.data.append(f"-A INPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
         # self.data.append(f"-A OUTPUT -p udp -m multiport -s 0.0.0.0 --dports 0:65535 -j DROP")
+        self.data.append(f"-P INPUT DROP")
+        # self.data.append(f"-P FORWARD DROP")
+        # self.data.append(f"-P OUTPUT DROP")
+        
         self.data.append(f"-I INPUT -m set --match-set blacklist{self.version} src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
