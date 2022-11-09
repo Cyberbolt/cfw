@@ -62,19 +62,17 @@ class Rules(list):
             return
         # New configuration file
         ssh_port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
+        
         if ssh_port == '\n':
             ssh_port = None
         if ssh_port:
             self.data.append(f"-A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
             self.data.append(f"-A OUTPUT -p tcp --dport {ssh_port} -j ACCEPT")
-            self.data.append(f"-A INPUT -i lo -j ACCEPT")
-            self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
-        else:
-            self.data.append(f"-A INPUT -i lo -j ACCEPT")
-            self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
-        shell(f"ip{self.version}tables -P INPUT DROP")
-        shell(f"ip{self.version}tables -P FORWARD DROP")
-        shell(f"ip{self.version}tables -P OUTPUT DROP")
+        self.data.append(f"-A INPUT -i lo -j ACCEPT")
+        self.data.append(f"-A OUTPUT -o lo -j ACCEPT")
+        self.data.append(f"-P INPUT DROP")
+        self.data.append(f"-P FORWARD DROP")
+        self.data.append(f"-P OUTPUT DROP")
         self.data.append(f"-I INPUT -m set --match-set blacklist{self.version} src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
