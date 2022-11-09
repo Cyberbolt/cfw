@@ -61,7 +61,7 @@ class Rules(list):
                 self.data = pickle.load(f)
             return
         # New configuration file
-        ssh_port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'")
+        ssh_port = shell("netstat -anp | grep ssh | awk '{print $4}' | awk 'NR==1{print}' | awk -F : '{print $2}'").rstrip()
         
         if ssh_port == '\n':
             ssh_port = None
