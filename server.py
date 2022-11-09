@@ -9,7 +9,7 @@ items = []
 
 @app.on_event("startup")
 def startup_event():
-    rules, rules6 = cfw.start()
+    rules, rules6 = cfw.ip_tools.start()
     items.append(rules)
     items.append(rules6)
 

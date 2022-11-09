@@ -3,7 +3,9 @@
 """
 
 import ipaddress
+import multiprocessing
 from typing import Tuple
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 import pandas as pd
@@ -12,6 +14,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from .config import config
 from .extensions import iptables, shell
 from .CFWError import ListCFWError
+
+executor = ThreadPoolExecutor(
+    max_workers = multiprocessing.cpu_count() * 2 + 1
+)
 
 
 def get_ss_ip() -> pd.DataFrame:
@@ -51,9 +57,11 @@ def block_ss_ip():
     for ip in ips:
         version = ipaddress.ip_address(ip).version
         if version == 4:
-            iptables.block_ip(ip, config["unblock_time"])
+            # iptables.block_ip(ip, config["unblock_time"])
+            executor.submit(iptables.block_ip, (ip, config["unblock_time"]))
         elif version == 6:
-            iptables.block_ip6(ip, config["unblock_time"])
+            # iptables.block_ip6(ip, config["unblock_time"])
+            executor.submit(iptables.block_ip6, (ip, config["unblock_time"]))
 
 
 def start() -> Tuple[iptables.Rules, iptables.Rules]:
