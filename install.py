@@ -33,14 +33,14 @@ def main():
     cmd("git clone https://github.com/Cyberbolt/cfw.git /etc/cfw/")
     # choose linux architecture
     architecture = shell("uname -m").strip()
-    if architecture == "x86_64":
-        cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-x86_64.tar.gz")
-    if architecture == "aarch64":
-        cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-aarch64.tar.gz")
+    if architecture != "aarch64" or architecture != "x86_64":
+        print("This CPU architecture is not supported, only x86_64 and arm64 are supported.")
+        sys.exit(1)
+    cmd(f"curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-{architecture}.tar.gz")
     # Unzip the python3.9 version
-    cmd("tar -zxvf py39-Linux-x86_64.tar.gz")
+    cmd(f"tar -zxvf py39-Linux-{architecture}.tar.gz")
     cmd("mv py39 /etc/cfw/py39")
-    cmd("rm -rf py39-Linux-x86_64.tar.gz")
+    cmd(f"rm -rf py39-Linux-{architecture}.tar.gz")
     # Install Python dependencies
     cmd("/etc/cfw/py39/bin/python -m pip install -r /etc/cfw/requirements.txt")
     # run with systemd
@@ -49,8 +49,7 @@ def main():
     cmd("systemctl enable cfw")
     cmd("systemctl start cfw")
     # add environment variable
-    cmd("echo alias cfw='/etc/cfw/py39/bin/python /etc/cfw/client.py'>>~/.bashrc")
-    cmd("source ~/.bashrc")
+    cmd("""echo "alias cfw='/etc/cfw/py39/bin/python /etc/cfw/client.py'">>~/.bashrc""")
 
 
 if __name__ == "__main__":
