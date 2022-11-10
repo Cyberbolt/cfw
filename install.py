@@ -33,7 +33,7 @@ def main():
     cmd("git clone https://github.com/Cyberbolt/cfw.git /etc/cfw/")
     # choose linux architecture
     architecture = shell("uname -m").strip()
-    if architecture != "aarch64" or architecture != "x86_64":
+    if architecture != "aarch64" and architecture != "x86_64":
         print("This CPU architecture is not supported, only x86_64 and arm64 are supported.")
         sys.exit(1)
     cmd(f"curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-{architecture}.tar.gz")
