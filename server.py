@@ -103,10 +103,11 @@ def status_port():
     rules, rules6 = items
     ports = []
     for rule in rules.data:
-        if 'tcp' in rule:
+        print("-------",rule)
+        if 'tcp' in rule and "0:65535" not in rule:
             port = (rule.split("--dport ")[1].split(" -j")[0], "tcp")
             ports.append(port)
-        elif 'udp' in rule:
+        elif 'udp' in rule and "0:65535" not in rule:
             port = (rule.split("--dport ")[1].split(" -j")[0], "udp")
             ports.append(port)
     ports = set(ports)
@@ -157,10 +158,10 @@ def status_port6():
     rules, rules6 = items
     ports = []
     for rule in rules6.data:
-        if 'tcp' in rule:
+        if 'tcp' in rule and "0:65535" not in rule:
             port = (rule.split("--dport ")[1].split(" -j")[0], "tcp")
             ports.append(port)
-        elif 'udp' in rule:
+        elif 'udp' in rule and "0:65535" not in rule:
             port = (rule.split("--dport ")[1].split(" -j")[0], "udp")
             ports.append(port)
     ports = set(ports)
