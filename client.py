@@ -1,4 +1,7 @@
-import re
+import os
+# Specify the interpreter running path as the cfw project directory.
+current_path = os.path.dirname(__file__)
+os.chdir(current_path)
 
 import httpx
 import click
