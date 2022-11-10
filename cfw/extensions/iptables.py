@@ -68,10 +68,11 @@ class Rules(list):
             self.data.append(f"-A INPUT -p tcp --dport {ssh_port} -j ACCEPT")
             # self.data.append(f"-A OUTPUT -p tcp --sport {ssh_port} -j ACCEPT")
         self.data.append(f"-A INPUT -i lo -j ACCEPT")
+        self.data.append(f"-I INPUT -m state --state ESTABLISHED -j ACCEPT")
         self.data.append(f"-A INPUT -p tcp -m multiport --dports 0:65535 -j DROP")
-        # self.data.append(f"-A OUTPUT -p tcp -m multiport -dport 0:65535 -j DROP")
+        self.data.append(f"-A OUTPUT -p tcp -m multiport --dports 0:65535 -j ACCEPT")
         self.data.append(f"-A INPUT -p udp -m multiport --dports 0:65535 -j DROP")
-        # self.data.append(f"-A OUTPUT -p udp -m multiport -dport 0:65535 -j DROP")
+        self.data.append(f"-A OUTPUT -p udp -m multiport --dports 0:65535 -j ACCEPT")
         self.data.append(f"-I INPUT -m set --match-set blacklist{self.version} src -j DROP")
         
     def add_tcp_port(self, port: str) -> bool:
