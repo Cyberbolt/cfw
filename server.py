@@ -103,7 +103,6 @@ def status_port():
     rules, rules6 = items
     ports = []
     for rule in rules.data:
-        print("-------",rule)
         if 'tcp' in rule and "0:65535" not in rule:
             port = (rule.split("--dport ")[1].split(" -j")[0], "tcp")
             ports.append(port)
