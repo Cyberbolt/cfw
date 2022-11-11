@@ -130,7 +130,7 @@ View ipv6 blacklist `cfw blacklist6`
 
 Allow ipv4 port `cfw allow [port]`
 
-Block ipv4 ports `cfw deny [port]`
+Block ipv4 port `cfw deny [port]`
 
 Separately allow ipv4 TCP port `cfw allow [port]/tcp`, for example `cfw allow 69.162.81.155/tcp`
 
@@ -146,7 +146,7 @@ Block ipv6 port `cfw deny6 [port]`
 
 Separately allow ipv6 TCP port `cfw allow6 [port]/tcp`, for example `cfw allow6 69.162.81.155/tcp`
 
-Block ipv6 TCP ports individually `cfw deny6 [port]/tcp`, e.g. `cfw deny6 69.162.81.155/tcp`
+Block ipv6 TCP port individually `cfw deny6 [port]/tcp`, e.g. `cfw deny6 69.162.81.155/tcp`
 
 ipv6 UDP port operation is the same
 
