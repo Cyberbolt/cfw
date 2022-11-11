@@ -134,7 +134,7 @@ Block ipv4 port `cfw deny [port]`
 
 Separately allow ipv4 TCP port `cfw allow [port]/tcp`, for example `cfw allow 69.162.81.155/tcp`
 
-Block ipv4 TCP ports individually `cfw deny [port]/tcp`, e.g. `cfw deny 69.162.81.155/tcp`
+Block ipv4 TCP port individually `cfw deny [port]/tcp`, e.g. `cfw deny 69.162.81.155/tcp`
 
 ipv4 UDP port operation is the same
 
