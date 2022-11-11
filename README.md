@@ -41,7 +41,7 @@ yum install -y curl ipset python3 git net-tools
 安装好系统依赖后，输入以下命令安装 CFW：
 
 ```
-curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | python3
+sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | python3
 ```
 
 完成安装后，使用 `source ~/.bashrc` 激活 CFW 的环境变量。(新开 shell 将自动激活环境变量)
@@ -49,7 +49,7 @@ curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | python3
 ### 卸载
 
 ```
-curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | python3
+sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | python3
 ```
 
 ### 配置
@@ -64,7 +64,7 @@ port: 6680
 frequency: 5
 # 允许每个 ip 连接的最大并发数，超过将被 CFW 封禁。
 max_num: 100
-# 解封 ip 的时间。此处默认 ip 被封禁后 600 秒将自动解封。
+# 解封 ip 的时间。此处默认 ip 被封禁后 600 秒将自动解封。若此处值为 0，则永久封禁。
 unblock_time: 600
 # 数据备份时间
 backup_time: 60
@@ -81,6 +81,6 @@ blacklist6: /etc/cfw/ip_list/blacklist6.txt
 
 # 日志文件的路径
 log_file_path: /etc/cfw/log/log.csv
-# 日志文件的最大行数。（达到最大行数后将自动滚动，若此处值为 0，则不限制最大行数）
+# 日志文件的最大行数。（达到最大行数后将自动滚动。若此处值为 0，则不限制最大行数）
 log_max_lines: 10000000
 ```
