@@ -1,4 +1,4 @@
-# cfw
+# CFW
 
 [中文版](https://github.com/Cyberbolt/cfw#%E4%B8%AD%E6%96%87%E7%89%88)
 
@@ -46,7 +46,7 @@ sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | pyth
 
 Once installed, use `source ~/.bashrc` to activate CFW's environment variables. (A new shell will automatically activate the environment variable)
 
-### uninstallation
+### Uninstallation
 
 ```
 sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | python3
@@ -104,7 +104,7 @@ log_max_lines: 10000000
 
 All `[]` in the command represent variables.
 
-#### run
+#### Run
 
 Stop CFW `systemctl stop cfw`
 
@@ -112,7 +112,7 @@ Start CFW `systemctl start cfw`
 
 Restart CFW `systemctl restart cfw`
 
-#### ip blacklist management
+#### Ip Blacklist Management
 
 Manually block a single ipv4 `cfw block [ip]`
 
@@ -152,7 +152,7 @@ ipv6 UDP port operation is the same
 
 View all allowed ipv6 ports `cfw status6`
 
-#### log operations
+#### Log Operations
 
 Dynamic query log `cfw log [num]`. 'num' is the number of query logs, and the query results will be in reverse chronological order.
 
