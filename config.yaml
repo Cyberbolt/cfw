@@ -10,15 +10,15 @@ unblock_time: 600
 backup_time: 60
 
 # ipv4 whitelist
-whitelist: ip_list/whitelist.txt
+whitelist: /etc/cfw/ip_list/whitelist.txt
 # ipv4 blacklist
-blacklist: ip_list/balack.txt
+blacklist: /etc/cfw/ip_list/blacklist.txt
 
 # ipv6 whitelist
-whitelist6: ip_list/whitelist6.txt
+whitelist6: /etc/cfw/ip_list/whitelist6.txt
 # ipv6 blacklist
-blacklist6: ip_list/balack.txt
+blacklist6: /etc/cfw/ip_list/blacklist6.txt
 
 # log file path
-log_file_path: log/log.csv
+log_file_path: /etc/cfw/log/log.csv
 log_max_lines: 10000000

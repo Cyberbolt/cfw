@@ -39,10 +39,17 @@ def get_ss_ip() -> pd.DataFrame:
 
 
 def block_blacklist_ip():
-    blacklist = iptables.Iplist("blacklist.txt")
+    blacklist = iptables.Iplist(config["blacklist"])
     for ip in blacklist:
-        if not iptables.block_ip(ip):
+        r = iptables.block_ip(ip, timeout=0)
+        if r.get("message") == "This ip is in the whitelist and cannot be blocked.":
             raise ListCFWError(f"The '{ip}' of the blacklist exists in the whitelist.")
+    
+    blacklist6 = iptables.Iplist(config["blacklist6"])
+    for ip in blacklist6:
+        r = iptables.block_ip6(ip, timeout=0)
+        if r.get("message") == "This ip is in the whitelist6 and cannot be blocked.":
+            raise ListCFWError(f"The '{ip}' of the blacklist6 exists in the whitelist6.")
 
 
 def block_ss_ip():
@@ -70,6 +77,8 @@ def start() -> Tuple[iptables.Rules, iptables.Rules]:
     rules6 = iptables.Rules(version=6)
     rules.save_rules()
     rules6.save_rules()
+    
+    block_blacklist_ip()
 
     sched = BackgroundScheduler(timezone="Asia/Shanghai")
     # ips are banned periodically.

@@ -206,7 +206,7 @@ def block_ip6(ip: str, timeout: int = 600, type: str = 'cfw'):
         if ipaddress.IPv6Network(ip, strict=False).overlaps(ipaddress.IPv6Network(ip_w, strict=False)):
             return {
                 "code": 0,
-                "message": "This ip is in the whitelist and cannot be blocked."
+                "message": "This ip is in the whitelist6 and cannot be blocked."
             }
     r = shell(f"ipset add blacklist6 {ip} timeout {timeout}")
     if r != '':
