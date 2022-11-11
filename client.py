@@ -53,7 +53,10 @@ def blacklist():
     r = httpx.get(f"http://127.0.0.1:{config['port']}/blacklist")
     text = r.json()["message"]
     ips = []
-    for element in text.split("Members:\n")[1].strip().split("\n"):
+    elements = text.split("Members:\n")[1].strip().split("\n")
+    if elements[0] == '':
+        return
+    for element in elements:
         ip, timeout = element.split(" timeout ")
         ips.append([ip, timeout])
     data = pd.DataFrame(ips, columns=["blacklist", "timeout"])
@@ -93,7 +96,10 @@ def blacklist6():
     r = httpx.get(f"http://127.0.0.1:{config['port']}/blacklist6")
     text = r.json()["message"]
     ips = []
-    for element in text.split("Members:\n")[1].strip().split("\n"):
+    elements = text.split("Members:\n")[1].strip().split("\n")
+    if elements[0] == '':
+        return
+    for element in elements:
         ip, timeout = element.split(" timeout ")
         ips.append([ip, timeout])
     data = pd.DataFrame(ips, columns=["blacklist6", "timeout"])
