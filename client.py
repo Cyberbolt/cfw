@@ -23,7 +23,7 @@ def cli():
 """
     ipv4 block / unblock
 """
-@cli.command(help="block ip")
+@cli.command(help="Manually block a single ipv4.")
 @click.argument("ip", type=str)
 @click.option("-t", "--timeout", default=600, type=int)
 def block(ip: str, timeout: int):
@@ -37,7 +37,7 @@ def block(ip: str, timeout: int):
         print(r.json()["message"])
         
 
-@cli.command(help="unblock ip")
+@cli.command(help="Manually unblock a single ipv4.")
 @click.argument("ip", type=str)
 def unblock(ip: str):
     r = httpx.get(f"http://127.0.0.1:{config['port']}/unblock_ip", 
@@ -48,7 +48,7 @@ def unblock(ip: str):
         print(r.json()["message"])
 
 
-@cli.command(help="blacklist ip")
+@cli.command(help="View ipv4 blacklist.")
 def blacklist():
     r = httpx.get(f"http://127.0.0.1:{config['port']}/blacklist")
     text = r.json()["message"]
@@ -66,7 +66,7 @@ def blacklist():
 """
     ipv6 block / unblock
 """
-@cli.command(help="block ipv6")
+@cli.command(help="Manually block a single ipv6.")
 @click.argument("ip", type=str)
 @click.option("-t", "--timeout", default=600, type=int)
 def block6(ip: str, timeout: int):
@@ -80,7 +80,7 @@ def block6(ip: str, timeout: int):
         print(r.json()["message"])
         
 
-@cli.command(help="unblock ipv6")
+@cli.command(help="Manually unblock a single ipv6.")
 @click.argument("ip", type=str)
 def unblock6(ip: str):
     r = httpx.get(f"http://127.0.0.1:{config['port']}/unblock_ip6", 
@@ -91,7 +91,7 @@ def unblock6(ip: str):
         print(r.json()["message"])
 
 
-@cli.command(help="blacklist ipv6")
+@cli.command(help="View ipv6 blacklist.")
 def blacklist6():
     r = httpx.get(f"http://127.0.0.1:{config['port']}/blacklist6")
     text = r.json()["message"]
@@ -109,7 +109,7 @@ def blacklist6():
 """
     ipv4 port
 """
-@cli.command(help="allow port")
+@cli.command(help="Allow ipv4 port.")
 @click.argument("port", type=str)
 def allow(port: str):
     try:
@@ -134,7 +134,7 @@ def allow(port: str):
         print(r.json()["message"])
 
 
-@cli.command(help="deny port")
+@cli.command(help="Block ipv4 port.")
 @click.argument("port", type=str)
 def deny(port: str):
     try:
@@ -159,7 +159,7 @@ def deny(port: str):
         print(r.json()["message"])
 
 
-@cli.command(help="status port")
+@cli.command(help="View all allowed ipv4 ports.")
 def status():
     r = httpx.get(f"http://127.0.0.1:{config['port']}/status")
     data = r.json()["message"]
@@ -172,7 +172,7 @@ def status():
 """
     ipv6 port
 """
-@cli.command(help="allow port")
+@cli.command(help="Allow ipv6 port.")
 @click.argument("port", type=str)
 def allow6(port: str):
     try:
@@ -197,7 +197,7 @@ def allow6(port: str):
         print(r.json()["message"])
 
 
-@cli.command(help="deny port")
+@cli.command(help="Block ipv6 port.")
 @click.argument("port", type=str)
 def deny6(port: str):
     try:
@@ -222,7 +222,7 @@ def deny6(port: str):
         print(r.json()["message"])
 
 
-@cli.command(help="status port")
+@cli.command(help="View all allowed ipv6 ports.")
 def status6():
     r = httpx.get(f"http://127.0.0.1:{config['port']}/status6")
     data = r.json()["message"]
@@ -235,7 +235,7 @@ def status6():
 """
     Log
 """
-@cli.command(help="cfw log")
+@cli.command(help="Dynamic query log.")
 @click.argument("num", type=str)
 def log(num: int = 1000):
     cmd(f"tail -f -n {num} {config['log_file_path']}")
