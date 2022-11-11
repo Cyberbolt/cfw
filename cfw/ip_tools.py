@@ -57,11 +57,11 @@ def block_ss_ip():
     for ip in ips:
         version = ipaddress.ip_address(ip).version
         if version == 4:
-            iptables.block_ip(ip, config["unblock_time"])
-            # executor.submit(iptables.block_ip, (ip, config["unblock_time"]))
+            # iptables.block_ip(ip, config["unblock_time"])
+            executor.submit(iptables.block_ip, ip, config["unblock_time"])
         elif version == 6:
-            iptables.block_ip6(ip, config["unblock_time"])
-            # executor.submit(iptables.block_ip6, (ip, config["unblock_time"]))
+            # iptables.block_ip6(ip, config["unblock_time"])
+            executor.submit(iptables.block_ip6, ip, config["unblock_time"])
 
 
 def start() -> Tuple[iptables.Rules, iptables.Rules]:
