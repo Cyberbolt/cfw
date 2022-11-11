@@ -142,24 +142,24 @@ class Iplist(list):
             Load the black and white list.
         """
         with open(path, 'r') as f:
-            text = f.read()
+            text = f.read().strip().rstrip()
         for ip in text.splitlines():
             if self.version == 4:
                 try:
                     ip = str(ipaddress.IPv4Address(ip))
-                except ipaddress.AddressValueError:
+                except:
                     try:
                         ip = str(ipaddress.IPv4Network(ip))
-                    except ipaddress.NetmaskValueError:
+                    except:
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
             elif self.version == 6:
                 try:
                     ip = str(ipaddress.IPv6Address(ip))
-                except ipaddress.AddressValueError:
+                except:
                     try:
                         ip = str(ipaddress.IPv6Network(ip))
-                    except ipaddress.NetmaskValueError:
+                    except:
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
 
@@ -171,7 +171,7 @@ log = Log()
 
 def block_ip(ip: str, timeout: int = 600, type: str = 'cfw'):
     for ip_w in whitelist:
-        if ipaddress.IPv4Address(ip) in ipaddress.IPv4Network(ip_w):
+        if ipaddress.IPv4Network(ip).overlaps(ipaddress.IPv4Network(ip_w)):
             return {
                 "code": 0,
                 "message": "This ip is in the whitelist and cannot be blocked."
