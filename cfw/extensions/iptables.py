@@ -149,7 +149,7 @@ class Iplist(list):
                     ip = str(ipaddress.IPv4Address(ip))
                 except:
                     try:
-                        ip = str(ipaddress.IPv4Network(ip))
+                        ip = str(ipaddress.IPv4Network(ip, strict=False))
                     except:
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
@@ -158,7 +158,7 @@ class Iplist(list):
                     ip = str(ipaddress.IPv6Address(ip))
                 except:
                     try:
-                        ip = str(ipaddress.IPv6Network(ip))
+                        ip = str(ipaddress.IPv6Network(ip, strict=False))
                     except:
                         raise ListCFWError("The ip format is incorrect.")
                 self.append(ip)
@@ -171,7 +171,7 @@ log = Log()
 
 def block_ip(ip: str, timeout: int = 600, type: str = 'cfw'):
     for ip_w in whitelist:
-        if ipaddress.IPv4Network(ip).overlaps(ipaddress.IPv4Network(ip_w)):
+        if ipaddress.IPv4Network(ip, strict=False).overlaps(ipaddress.IPv4Network(ip_w, strict=False)):
             return {
                 "code": 0,
                 "message": "This ip is in the whitelist and cannot be blocked."
@@ -203,7 +203,7 @@ def unblock_ip(ip: str, type: str = 'cfw'):
 
 def block_ip6(ip: str, timeout: int = 600, type: str = 'cfw'):
     for ip_w in whitelist6:
-        if ipaddress.IPv6Network(ip).overlaps(ipaddress.IPv6Network(ip_w)):
+        if ipaddress.IPv6Network(ip, strict=False).overlaps(ipaddress.IPv6Network(ip_w, strict=False)):
             return {
                 "code": 0,
                 "message": "This ip is in the whitelist and cannot be blocked."
