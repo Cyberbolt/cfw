@@ -7,6 +7,7 @@ cfw/data/iptables-cfw
 cfw/data/ip6tables-cfw
 log/log.csv
 .DS_Store
+cfw/.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
