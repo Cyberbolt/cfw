@@ -1,3 +1,5 @@
+# For detailed parameter description, please refer to https://github.com/Cyberbolt/cfw#configuration
+
 # cfw run port
 port: 6680
 # Program running frequency, unit: second
