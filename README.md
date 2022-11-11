@@ -92,6 +92,8 @@ log_max_lines: 10000000
 
 ### 相关命令
 
+命令中所有 `[]` 表示变量。
+
 #### 运行
 
 停止 CFW `systemctl stop cfw`
@@ -120,17 +122,29 @@ log_max_lines: 10000000
 
 阻止 ipv4 端口 `cfw deny [port]`
 
+单独放行 ipv4 TCP 端口 `cfw allow [port]/tcp`，示例如 `cfw allow 69.162.81.155/tcp`
+
+单独阻止 ipv4 TCP 端口 `cfw deny [port]/tcp`，示例如 `cfw deny 69.162.81.155/tcp`
+
+ipv4 UDP 端口操作同理
+
 查看所有放行的 ipv4 端口 `cfw status`
 
 放行 ipv6 端口 `cfw allow6 [port]`
 
 阻止 ipv6 端口 `cfw deny6 [port]`
 
+单独放行 ipv6 TCP 端口 `cfw allow6 [port]/tcp`，示例如 `cfw allow6 69.162.81.155/tcp`
+
+单独阻止 ipv6 TCP 端口 `cfw deny6 [port]/tcp`，示例如 `cfw deny6 69.162.81.155/tcp`
+
+ipv6 UDP 端口操作同理
+
 查看所有放行的 ipv6 端口 `cfw status6`
 
 #### 日志操作
 
-查询日志 `cfw log [num]`。'num' 为查询日志的条数，结果按时间倒序。
+动态查询日志 `cfw log [num]`。'num' 为查询日志的条数，查询结果将按时间倒序。
 
 ### 更多
 
