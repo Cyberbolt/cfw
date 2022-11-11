@@ -182,7 +182,7 @@ def block_ip(ip: str, timeout: int = 600, type: str = 'cfw'):
             "code": 0,
             "message": "This ip has been blocked."
         }
-    log.write(type, f"block {ip}")
+    log.write(type, f"block {ip}, timeout: {timeout}")
     return {
         "code": 1
     }
@@ -214,7 +214,7 @@ def block_ip6(ip: str, timeout: int = 600, type: str = 'cfw'):
             "code": 0,
             "message": "This ip has been blocked."
         }
-    log.write(type, f"block {ip}")
+    log.write(type, f"block {ip}, timeout: {timeout}")
     return {
         "code": 1
     }
