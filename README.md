@@ -22,6 +22,11 @@ CFW (Cyber Firewall) 是一个人性化的 Linux 防火墙。它旨在协助阻�
 
 CFW 通过 `ss -Hntu | awk '{print $5,$6}'` 命令获取当前服务器的所有连接。客户端的请求若超过设定并发数，该 ip 将被 iptables 封禁，并存储在 ipset 数据结构中。
 
+### 链接
+
+- GitHub: https://github.com/Cyberbolt/cfw
+- 电光笔记: https://www.cyberlight.xyz/
+
 ### 安装
 
 请先确保系统拥有以下依赖：
@@ -87,5 +92,46 @@ log_max_lines: 10000000
 
 ### 相关命令
 
+#### 运行
+
+停止 CFW `systemctl stop cfw`
+
+启动 CFW `systemctl start cfw`
+
 重启 CFW `systemctl restart cfw`
-停止 CFW ``
+
+#### ip 黑名单管理
+
+手动封禁单个 ipv4 `cfw block [ip]`
+
+手动解封单个 ipv4 `cfw unblock [ip]`
+
+查看 ipv4 黑名单 `cfw blacklist`
+
+手动封禁单个 ipv6 `cfw block6 [ip]`
+
+手动解封单个 ipv6 `cfw unblock6 [ip]`
+
+查看 ipv6 黑名单 `cfw blacklist6`
+
+#### Linux 端口操作
+
+放行 ipv4 端口 `cfw allow [port]`
+
+阻止 ipv4 端口 `cfw deny [port]`
+
+查看所有放行的 ipv4 端口 `cfw status`
+
+放行 ipv6 端口 `cfw allow6 [port]`
+
+阻止 ipv6 端口 `cfw deny6 [port]`
+
+查看所有放行的 ipv6 端口 `cfw status6`
+
+#### 日志操作
+
+查询日志 `cfw log [num]`。'num' 为查询日志的条数，结果按时间倒序。
+
+### 更多
+
+如果您在使用中遇到任何问题，欢迎在 [https://github.com/Cyberbolt/cfw/issues](https://github.com/Cyberbolt/cfw/issues) 处留言。
