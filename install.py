@@ -50,6 +50,11 @@ def main():
     cmd("systemctl start cfw")
     # add environment variable
     cmd("""echo "alias cfw='/etc/cfw/py39/bin/python /etc/cfw/client.py'">>~/.bashrc""")
+    print("""
+CFW installation is complete, please enter the following command to activate 'cfw'.
+            
+    source ~/.bashrc
+""")
 
 
 if __name__ == "__main__":
