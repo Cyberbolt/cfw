@@ -39,7 +39,7 @@ def main():
     for line in lines:
         if "alias cfw='/etc/cfw/py39/bin/python /etc/cfw/client.py'" not in line:
             text_new += line + "\n"
-    with open("~/.bashrc", "w") as f:
+    with open("/root/.bashrc", "w") as f:
         f.write(text_new)
 
 

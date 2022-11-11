@@ -45,3 +45,42 @@ curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | python3
 ```
 
 完成安装后，使用 `source ~/.bashrc` 激活 CFW 的环境变量。(新开 shell 将自动激活环境变量)
+
+### 卸载
+
+```
+curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | python3
+```
+
+### 配置
+
+配置文件在 `/etc/cfw/config.yaml` 中，修改配置文件后运行 `systemctl restart cfw` 即可生效。
+
+配置文件参数说明：
+```
+# CFW 运行端口
+port: 6680
+# CFW 检测连接的频率，单位：秒。此处默认 5 秒一次。
+frequency: 5
+# 允许每个 ip 连接的最大并发数，超过将被 CFW 封禁。
+max_num: 100
+# 解封 ip 的时间。此处默认 ip 被封禁后 600 秒将自动解封。
+unblock_time: 600
+# 数据备份时间
+backup_time: 60
+
+# ipv4 白名单路径。写在 txt 中，一行一个 ip，支持子网掩码。
+whitelist: /etc/cfw/ip_list/whitelist.txt
+# ipv4 黑名单路径。写在 txt 中，一行一个 ip，支持子网掩码。
+blacklist: /etc/cfw/ip_list/blacklist.txt
+
+# ipv6 白名单路径。写在 txt 中，一行一个 ip。
+whitelist6: /etc/cfw/ip_list/whitelist6.txt
+# ipv6 黑名单路径。写在 txt 中，一行一个 ip。
+blacklist6: /etc/cfw/ip_list/blacklist6.txt
+
+# 日志文件的路径
+log_file_path: /etc/cfw/log/log.csv
+# 日志文件的最大行数。（达到最大行数后将自动滚动，若此处值为 0，则不限制最大行数）
+log_max_lines: 10000000
+```
