@@ -31,6 +31,10 @@ def shell(cmd: str) -> str:
 def main():
     # Remove cfw
     cmd("rm -rf /etc/cfw/")
+    # Remove cfw for systemd
+    cmd("systemctl stop cfw")
+    cmd("rm /etc/systemd/system/cfw.service")
+    cmd("systemctl daemon-reload")
     # Delete environment variable
     with open("/root/.bashrc", "r") as f:
         text = f.read()

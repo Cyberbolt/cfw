@@ -84,3 +84,8 @@ log_file_path: /etc/cfw/log/log.csv
 # 日志文件的最大行数。（达到最大行数后将自动滚动。若此处值为 0，则不限制最大行数）
 log_max_lines: 10000000
 ```
+
+### 相关命令
+
+重启 CFW `systemctl restart cfw`
+停止 CFW ``
