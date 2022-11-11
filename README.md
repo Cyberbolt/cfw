@@ -18,9 +18,9 @@ To use with CDN, please set the ip segment of CDN to CFW whitelist.
 
 ### Implementation
 
-CFW 通过 `ss -Hntu | awk '{print $5,$6}'` 命令获取当前服务器的所有连接。客户端的请求若超过设定并发数，该 ip 将被 iptables 封禁，并存储在 ipset 数据结构中。
+CFW gets all connections to the current server with the `ss -Hntu | awk '{print $5,$6}'` command. If the client's request exceeds the set concurrent number, the ip will be blocked by iptables and stored in the ipset data structure.
 
-CFW 通过调用 iptables 命令实现 Linux 端口开关。
+CFW implements Linux port switching by invoking the iptables command.
 
 ### Installation
 
