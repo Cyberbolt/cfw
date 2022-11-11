@@ -41,7 +41,7 @@ def main():
             text_new += line + "\n"
     with open("/root/.bashrc", "w") as f:
         f.write(text_new)
-    print("CFW uninstalled")
+    print("CFW uninstallation complete.")
 
 
 if __name__ == "__main__":
