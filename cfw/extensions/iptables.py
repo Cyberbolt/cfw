@@ -203,7 +203,7 @@ def unblock_ip(ip: str, type: str = 'cfw'):
 
 def block_ip6(ip: str, timeout: int = 600, type: str = 'cfw'):
     for ip_w in whitelist6:
-        if ipaddress.IPv6Address(ip) in ipaddress.IPv6Network(ip_w):
+        if ipaddress.IPv6Network(ip).overlaps(ipaddress.IPv6Network(ip_w)):
             return {
                 "code": 0,
                 "message": "This ip is in the whitelist and cannot be blocked."
