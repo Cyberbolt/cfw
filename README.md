@@ -2,7 +2,7 @@
 
 [中文版](https://github.com/Cyberbolt/cfw#%E4%B8%AD%E6%96%87%E7%89%88)
 
-CFW (Cyber Firewall) is a human friendly Linux firewall. (In Development) It is designed to help prevent denial of service attacks while controlling Linux port switches.
+CFW (Cyber Firewall) is a human friendly Linux firewall. It is designed to help prevent denial of service (DDOS) attacks while controlling Linux port switches.
 
 The software is based on iptables and ipset and is developed with Python. It is recommended to close the firewall (such as firewalld, ufw) that comes with the distribution to avoid conflicts.
 
@@ -162,7 +162,7 @@ If you encounter any problems in use, please leave a message at [https://github.
 
 # 中文版
 
-CFW (Cyber Firewall) 是一个人性化的 Linux 防火墙。它旨在协助阻止拒绝服务攻击，同时能控制 Linux 端口开关。
+CFW (Cyber Firewall) 是一个人性化的 Linux 防火墙。它旨在协助阻止拒绝服务攻击(DDOS)，同时能控制 Linux 端口开关。
 
 该软件基于 iptables 和 ipset，使用 Python 开发，使用时建议关闭发行版自带的防火墙(如 firewalld、ufw)避免冲突。
 
