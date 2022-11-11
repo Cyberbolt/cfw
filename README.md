@@ -66,10 +66,10 @@ frequency: 5
 max_num: 100
 # 解封 ip 的时间。此处默认 ip 被封禁后 600 秒将自动解封。若此处值为 0，则永久封禁。
 unblock_time: 600
-# 数据备份时间
+# 数据备份时间，单位：秒。
 backup_time: 60
 
-# ipv4 白名单路径。写在 txt 中，一行一个 ip，支持子网掩码。
+# ipv4 白名单路径。写在 txt 中，一行一个 ip，支持子网掩码。(本地地址、内网地址默认在该文件中)
 whitelist: /etc/cfw/ip_list/whitelist.txt
 # ipv4 黑名单路径。写在 txt 中，一行一个 ip，支持子网掩码。
 blacklist: /etc/cfw/ip_list/blacklist.txt
