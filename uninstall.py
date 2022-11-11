@@ -32,7 +32,7 @@ def main():
     # Remove cfw
     cmd("rm -rf /etc/cfw/")
     # Delete environment variable
-    with open("~/.bashrc", "r") as f:
+    with open("/root/.bashrc", "r") as f:
         text = f.read()
     lines = text.splitlines()
     text_new = ""
