@@ -55,7 +55,7 @@ sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | py
 ### Links
 
 - GitHub: https://github.com/Cyberbolt/cfw
-- 电光笔记: https://www.cyberlight.xyz/
+- CyberLight: https://www.cyberlight.xyz/
 - Potato Blog: https://www.liuya.love/
 
 ### Configuration
