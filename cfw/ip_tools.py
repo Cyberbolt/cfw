@@ -30,6 +30,11 @@ def get_ss_ip() -> pd.DataFrame:
         server, client = line.split(" ")
         server_ip, server_port = server.split(":")
         client_ip, client_port = client.split(":")
+        # If it is ipv6, convert the format.
+        if server_ip[0] == "[":
+            server_ip = server_ip[1:-1]
+        if client_ip[0] == "[":
+            client_ip = client_ip[1:-1]
         data.append([server_ip, server_port, client_ip, client_port])
     data_df = pd.DataFrame(
         data, 
