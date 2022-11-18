@@ -114,7 +114,7 @@ log_file_path: /etc/cfw/log/log.csv
 log_max_lines: 10000000
 ```
 
-### Related commands
+### Commands
 
 All `[]` in the command represent variables.
 
@@ -279,7 +279,7 @@ log_file_path: /etc/cfw/log/log.csv
 log_max_lines: 10000000
 ```
 
-### 相关命令
+### 命令
 
 命令中所有 `[]` 表示变量。
 

@@ -103,7 +103,7 @@ log_file_path: /etc/cfw/log/log.csv
 log_max_lines: 10000000
 ```
 
-### 相关命令
+### 命令
 
 命令中 `[]` 表示变量。
 
