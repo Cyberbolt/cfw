@@ -46,6 +46,8 @@ sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | pyth
 
 Once installed, use `source ~/.bashrc` to activate CFW's environment variables. (A new shell will automatically activate the environment variable)
 
+Enter `systemctl status cfw` in the Linux terminal, if `active (running)` is displayed, it means that CFW has been successfully run, and it will run automatically when the server restarts.
+
 ### Uninstallation
 
 ```
@@ -205,6 +207,8 @@ sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/install.py | pyth
 ```
 
 完成安装后，使用 `source ~/.bashrc` 激活 CFW 的环境变量。(新开 shell 将自动激活环境变量)
+
+在 Linux 终端输入 `systemctl status cfw`，显示 `active (running)` 字样说明 CFW 已成功运行，同时会在服务器重启时自动运行。
 
 ### 卸载
 
