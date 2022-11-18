@@ -161,4 +161,4 @@ ipv6 UDP 端口操作同理
 
 ### 更多
 
-如果您在使用中遇到任何问题，欢迎在 [https://github.com/Cyberbolt/cfw/issues](https://github.com/Cyberbolt/cfw/issues) 处留言。
+如果您在使用中遇到任何问题，欢迎在 [https://github.com/Cyberbolt/cfw/issues](https://github.com/Cyberbolt/cfw/issues) 处留言。有了您的帮助，CFW 才能日渐壮大。

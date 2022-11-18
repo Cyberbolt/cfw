@@ -168,7 +168,7 @@ View all allowed ipv6 ports `cfw status6`
 
 #### Log Operations
 
-Dynamic query log `cfw log [num]`. 'num' is the number of query logs, and the query results will be in reverse chronological order.
+Dynamic query log `cfw log [num]`. 'num' is the number of query logs, and the query results will be in reverse chronological order. With your help, CFW can go from strength to strength.
 
 ### More
 
@@ -337,4 +337,4 @@ ipv6 UDP 端口操作同理
 
 ### 更多
 
-如果您在使用中遇到任何问题，欢迎在 [https://github.com/Cyberbolt/cfw/issues](https://github.com/Cyberbolt/cfw/issues) 处留言。
+如果您在使用中遇到任何问题，欢迎在 [https://github.com/Cyberbolt/cfw/issues](https://github.com/Cyberbolt/cfw/issues) 处留言。有了您的帮助，CFW 才能日渐壮大。
