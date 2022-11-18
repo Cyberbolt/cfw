@@ -36,7 +36,7 @@ def main():
     if architecture != "aarch64" and architecture != "x86_64":
         print("This CPU architecture is not supported, only x86_64 and arm64 are supported.")
         sys.exit(1)
-    cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/v1.0.0/py39-Linux-{}.tar.gz".format(architecture))
+    cmd("curl -# -OL https://github.com/Cyberbolt/cfw/releases/download/1.0.0/py39-Linux-{}.tar.gz".format(architecture))
     # Unzip the python3.9 version
     cmd("tar -zxvf py39-Linux-{}.tar.gz".format(architecture))
     cmd("mv py39 /etc/cfw/py39")
