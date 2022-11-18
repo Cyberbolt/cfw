@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cfw"
-version = "1.0.0"
+version = "1.0.1"
 description = "CFW (Cyber Firewall) is a human friendly Linux firewall."
 authors = ["Cyberbolt <dtconlyone@gmail.com>, Potato-OvO <1224141267@qq.com>"]
 readme = "README.md"

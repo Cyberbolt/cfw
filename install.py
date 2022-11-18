@@ -30,7 +30,7 @@ def shell(cmd: str) -> str:
 
 def main():
     # clone cfw
-    cmd("git clone https://github.com/Cyberbolt/cfw.git /etc/cfw/")
+    cmd("git clone -b 1.0.1 https://github.com/Cyberbolt/cfw.git /etc/cfw/")
     # choose linux architecture
     architecture = shell("uname -m").strip()
     if architecture != "aarch64" and architecture != "x86_64":
