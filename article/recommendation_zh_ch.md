@@ -39,13 +39,13 @@ CFW 通过调用 iptables 命令实现 Linux 端口的开关。
 示例 1 (Debian, Ubuntu)
 
 ```
-apt install -y curl ipset python3 git net-tools
+sudo apt install -y curl ipset python3 git net-tools
 ```
 
 示例 2 (CentOS)
 
 ```
-yum install -y curl ipset python3 git net-tools
+sudo yum install -y curl ipset python3 git net-tools
 ```
 
 安装好系统依赖后，输入以下命令安装 CFW：
