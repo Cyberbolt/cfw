@@ -24,7 +24,7 @@ With CFW you will be able to:
 
 Web applications run on the complex Internet and may face malicious attacks at any time, resulting in denial of service. To ban these unfriendly ip, CFW was born for this.
 
-CFW was originally inspired by Pagoda Panel's Nginx Firewall. However, I encountered many difficulties in the process of using the Nginx firewall. The firewall only protects against CC attacks against web applications (usually ports 80 and 443), and cannot protect other ports of Linux servers. At the same time, the firewall needs to be paid on a monthly basis, and it is always bundled with the pagoda ecology (the latest pagoda panel even needs to log in to an account bound to the real-name system of the mobile phone), thus limiting the degree of freedom of the software. We wanted to run a firewall on all ports in clean Linux, so we developed one ourselves.
+CFW was originally inspired by BaoTa Panel's Nginx Firewall. However, I encountered many difficulties in the process of using the Nginx firewall. The firewall only protects against CC attacks against web applications (usually ports 80 and 443), and cannot protect other ports of Linux servers. At the same time, the firewall needs to be paid on a monthly basis, and it is always bundled with the BaoTa ecology (the latest BaoTa panel even needs to log in to an account bound to the real-name system of the mobile phone), thus limiting the degree of freedom of the software. We wanted to run a firewall on all ports in clean Linux, so we developed one ourselves.
 
 Since CFW is based on iptables and ipset, it will inevitably conflict with the firewall (such as firewalld, ufw) that comes with the distribution. We have added CFW to control the port switch.
 
