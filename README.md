@@ -2,25 +2,37 @@
 
 [中文版](https://github.com/Cyberbolt/cfw#%E4%B8%AD%E6%96%87%E7%89%88)
 
-CFW (Cyber Firewall) is a human friendly Linux firewall. It is designed to help prevent denial of service (DDOS) attacks while controlling Linux port switches.
+CFW (Cyber Firewall) is a human friendly Linux firewall. It is designed to help prevent denial-of-service attacks (DDOS), and can control the opening and closing of Linux system ports. Since it runs natively based on Linux, CFW has good software compatibility.
 
-The software is based on iptables and ipset and is developed with Python. It is recommended to close the firewall (such as firewalld, ufw) that comes with the distribution to avoid conflicts.
+The software is based on iptables and ipset, and is developed in Python. When using it, it is recommended to turn off the firewall (such as firewalld, ufw) that comes with the distribution to avoid conflicts.
 
-With CFW, you will be able to:
+With CFW you will be able to:
 
-- Automatically block malicious IPs in the Internet through custom rules to prevent denial of service attacks
+- Automatically block malicious ip in the Internet through custom rules to prevent denial of service attacks
 
-- Control to open or close the Linux TCP/UDP port
+- Protects all ports of Linux from DDOS attacks, not just web applications
 
-- Get a friendly interactive experience
+- Obtain good software compatibility, natively support Nginx, Caddy and other servers
 
-To use with CDN, please set the ip segment of CDN to CFW whitelist.
+- Supports the use of CDN, when using CDN, please set the ip segment of CDN to CFW whitelist
+
+- Control open or close the TCP/UDP port of the Linux system
+
+- Get a friendly command-line interactive experience
+
+### Background
+
+Web applications run on the complex Internet and may face malicious attacks at any time, resulting in denial of service. To ban these unfriendly ip, CFW was born for this.
+
+CFW was originally inspired by Pagoda Panel's Nginx Firewall. However, I encountered many difficulties in the process of using the Nginx firewall. The firewall only protects against CC attacks against web applications (usually ports 80 and 443), and cannot protect other ports of Linux servers. At the same time, the firewall needs to be paid on a monthly basis, and it is always bundled with the pagoda ecology (the latest pagoda panel even needs to log in to an account bound to the real-name system of the mobile phone), thus limiting the degree of freedom of the software. We wanted to run a firewall on all ports in clean Linux, so we developed one ourselves.
+
+Since CFW is based on iptables and ipset, it will inevitably conflict with the firewall (such as firewalld, ufw) that comes with the distribution. We have added CFW to control the port switch.
 
 ### Implementation
 
-CFW gets all connections to the current server with the `ss -Hntu | awk '{print $5,$6}'` command. If the client's request exceeds the set concurrent number, the ip will be blocked by iptables and stored in the ipset data structure.
+CFW gets all the connections of the current server through `ss -Hntu | awk '{print $5,$6}'` command. If the client's request exceeds the set concurrent number, the ip will be blocked by iptables and stored in the ipset data structure.
 
-CFW implements Linux port switching by invoking the iptables command.
+CFW realizes the switch of Linux port by calling iptables command.
 
 ### Installation
 
@@ -164,25 +176,37 @@ If you encounter any problems in use, please leave a message at [https://github.
 
 # 中文版
 
-CFW (Cyber Firewall) 是一个人性化的 Linux 防火墙。它旨在协助阻止拒绝服务攻击(DDOS)，同时能控制 Linux 端口开关。
+CFW (Cyber Firewall) 是一个人性化的 Linux 防火墙。它旨在协助阻止拒绝服务攻击 (DDOS)，同时能控制 Linux 系统端口的开关。由于基于 Linux 原生运行，CFW 拥有良好的软件兼容性。
 
-该软件基于 iptables 和 ipset，使用 Python 开发，使用时建议关闭发行版自带的防火墙(如 firewalld、ufw)避免冲突。
+该软件基于 iptables 和 ipset，使用 Python 开发，使用时建议关闭发行版自带的防火墙 (如 firewalld、ufw) 避免冲突。
 
 通过 CFW，您将能够：
 
 - 通过自定义的规则自动封禁互联网中的恶意 ip，以防止拒绝服务攻击
 
-- 控制开启或关闭 Linux 的 TCP/UDP 端口
+- 保护 Linux 的所有端口遭受 DDOS 攻击，而不仅仅是 Web 应用
 
-- 获得友好的交互式体验
+- 获得良好的软件兼容性，原生支持 Nginx、Caddy 等服务器
 
-如欲配合 CDN 使用，请将 CDN 的 ip 段设置为 CFW 白名单。
+- 支持配合 CDN 使用，使用 CDN 时请将 CDN 的 ip 段设置为 CFW 白名单
+
+- 控制开启或关闭 Linux 系统的 TCP/UDP 端口
+
+- 获得友好的命令行交互式体验
+
+### 项目背景
+
+Web 应用程序运行在复杂的互联网中，随时可能面临恶意攻击，导致拒绝服务现象。封禁这些不友好的 ip，CFW 正是为此而诞生。
+
+CFW 的灵感最初来自宝塔面板的 Nginx 防火墙。然而，使用 Nginx 防火墙的过程中遇到诸多不顺。该防火墙仅针对 Web 应用 (通常是 80 和 443 端口) 防御 CC 攻击，无法保护 Linux 服务器的其他端口。同时，该防火墙需要按月付费，并始终捆绑宝塔生态(最新的宝塔面板甚至需要登录绑定手机实名制的账号)，从而限制了软件自由度。我们想在纯净的 Linux 中运行防火墙，并对所有端口生效，于是自己开发了一个。
+
+由于 CFW 基于 iptables 和 ipset，不免会与发行版自带的防火墙 (如 firewalld、ufw) 冲突，我们增加了 CFW 对端口开关的控制。
 
 ### 实现方法
 
 CFW 通过 `ss -Hntu | awk '{print $5,$6}'` 命令获取当前服务器的所有连接。客户端的请求若超过设定并发数，该 ip 将被 iptables 封禁，并存储在 ipset 数据结构中。
 
-CFW 通过调用 iptables 命令实现 Linux 端口开关。
+CFW 通过调用 iptables 命令实现 Linux 端口的开关。
 
 ### 安装
 
