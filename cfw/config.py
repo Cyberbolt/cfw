@@ -8,7 +8,7 @@ with open("config.yaml") as f:
 
 
 def load_config():
-    if not config.get("port"):
+    if config.get("port") == None:
         raise ConfigurationCFWError(
             "The 'port' parameter does not exist."
         )
@@ -17,7 +17,7 @@ def load_config():
             "The 'port' parameter must be of integer type."
         )
         
-    if not config.get("frequency"):
+    if config.get("frequency") == None:
         raise ConfigurationCFWError(
             "The 'frequency' parameter does not exist."
         )
@@ -26,7 +26,7 @@ def load_config():
             "The 'frequency' parameter must be of integer type."
         )
         
-    if not config.get("max_num"):
+    if config.get("max_num") == None:
         raise ConfigurationCFWError(
             "The 'max_num' parameter does not exist."
         )
@@ -35,7 +35,7 @@ def load_config():
             "The 'max_num' parameter must be of integer type."
         )
         
-    if not config.get("backup_time"):
+    if config.get("backup_time") == None:
         raise ConfigurationCFWError(
             "The 'backup_time' parameter does not exist."
         )
@@ -44,7 +44,7 @@ def load_config():
             "The 'backup_time' parameter must be of integer type."
         )
         
-    if not config.get("unblock_time"):
+    if config.get("unblock_time") == None:
         raise ConfigurationCFWError(
             "The 'unblock_time' parameter does not exist."
         )
@@ -53,7 +53,7 @@ def load_config():
             "The 'unblock_time' parameter must be of integer type."
         )
     
-    if not config.get("whitelist"):
+    if config.get("whitelist") == None:
         raise ConfigurationCFWError(
             "The 'whitelist' parameter does not exist."
         )
@@ -61,7 +61,7 @@ def load_config():
         raise ConfigurationCFWError(
             "The whitelist file must be in 'txt' format."
         )
-    if not config.get("blacklist"):
+    if config.get("blacklist") == None:
         raise ConfigurationCFWError(
             "The 'blacklist' parameter does not exist."
         )
@@ -69,7 +69,7 @@ def load_config():
         raise ConfigurationCFWError(
             "The blacklist file must be in 'txt' format."
         )
-    if not config.get("whitelist6"):
+    if config.get("whitelist6") == None:
         raise ConfigurationCFWError(
             "The 'whitelist6' parameter does not exist."
         )
@@ -77,7 +77,7 @@ def load_config():
         raise ConfigurationCFWError(
             "The whitelist6 file must be in 'txt' format."
         )
-    if not config.get("blacklist6"):
+    if config.get("blacklist6") == None:
         raise ConfigurationCFWError(
             "The 'blacklist6' parameter does not exist."
         )
@@ -86,7 +86,7 @@ def load_config():
             "The blacklist6 file must be in 'txt' format."
         )
     
-    if not config.get("log_file_path"):
+    if config.get("log_file_path") == None:
         raise ConfigurationCFWError(
             "The 'log_file_path' parameter does not exist."
         )
@@ -95,7 +95,7 @@ def load_config():
             "The log file must be in 'csv' format."
         )
         
-    if not config.get("log_max_lines"):
+    if config.get("log_max_lines") == None:
         raise ConfigurationCFWError(
             "The 'log_max_lines' parameter does not exist."
         )
