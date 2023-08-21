@@ -70,7 +70,7 @@ sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | py
 
 - GitHub: https://github.com/Cyberbolt/cfw
 - CyberLight: https://www.cyberlight.xyz/
-- Potato Blog: https://www.liuya.love/
+- Potato Blog: https://www.weekly21.com/
 
 ### Configuration
 
@@ -244,7 +244,7 @@ sudo curl https://raw.githubusercontent.com/Cyberbolt/cfw/main/uninstall.py | py
 
 - GitHub: https://github.com/Cyberbolt/cfw
 - 电光笔记: https://www.cyberlight.xyz/
-- Potato Blog: https://www.liuya.love/
+- Potato Blog: https://www.weekly21.com/
 
 ### 配置
 
