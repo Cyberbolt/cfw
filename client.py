@@ -7,7 +7,7 @@ import httpx
 import click
 import pandas as pd
 
-from cfw import cmd, config, ParameterCFWError
+from cfw import cmd, shell, config, ParameterCFWError
 
 # Show all columns and rows.
 pd.set_option('display.max_columns', None)
@@ -239,6 +239,16 @@ def status6():
 @click.argument("num", type=str)
 def log(num: int = 1000):
     cmd(f"tail -f -n {num} {config['log_file_path']}")
+
+
+"""
+    Update CFW
+"""
+@cli.command(help="Update CFW")
+def update():
+    shell("git --git-dir=/etc/cfw/.git --work-tree=/etc/cfw pull https://github.com/Cyberbolt/cfw.git --quiet")
+    cmd("systemctl start cfw")
+    print("CFW has been updated.")
 
 
 if __name__ == '__main__':
