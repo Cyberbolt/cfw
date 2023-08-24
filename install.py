@@ -25,7 +25,7 @@ def shell(cmd: str) -> str:
 
 def main():
     # clone cfw
-    cmd(f"git clone -b {VSERSION} https://github.com/Cyberbolt/cfw.git /etc/cfw/")
+    cmd("git clone -b {} https://github.com/Cyberbolt/cfw.git /etc/cfw/".format(VSERSION))
     # choose linux architecture
     architecture = shell("uname -m").strip()
     if architecture != "aarch64" and architecture != "x86_64":
