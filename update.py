@@ -8,7 +8,6 @@ def shell(cmd: str) -> str:
     """
     subprocess.run(
         shlex.split(cmd),
-        shell=True,
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -18,6 +17,7 @@ def shell(cmd: str) -> str:
 def main():
     cmd = "git --git-dir=/etc/cfw/.git --work-tree=/etc/cfw pull https://github.com/Cyberbolt/cfw.git --quiet"
     shell(cmd)
+    print("CFW has been updated.")
 
 
 if __name__ == "__main__":
