@@ -2,7 +2,7 @@ import sys
 import subprocess
 
 
-VSERSION = "1.0.2"
+VSERSION = "1.0.3"
 
 
 def cmd(cmd: str):
